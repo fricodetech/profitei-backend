@@ -9,6 +9,8 @@ import com.whatsapp.financeiro.infrastructure.repositories.entities.CategoriaEnt
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class CategoriaDataProvider implements CategoriaGateway {
@@ -17,9 +19,10 @@ public class CategoriaDataProvider implements CategoriaGateway {
     private final CategoriaMapperInfra mapper;
 
     public static final String MENSAGEM_ERRO_SALVAR_CATEGORIA = "Erro ao salvar a categoria.";
+    public static final String MENSAGEM_ERRO_LISTAR_CATEGORIAS = "Erro ao listar todas as categorias.";
 
     @Override
-    public Categoria salvarCategoria(Categoria categoriaCriada) {
+    public Categoria salvar(Categoria categoriaCriada) {
 
         CategoriaEntity categoriaEntity = mapper.paraEntity(categoriaCriada);
 
@@ -30,5 +33,20 @@ public class CategoriaDataProvider implements CategoriaGateway {
         }
 
         return mapper.paraDomain(categoriaEntity);
+    }
+
+    @Override
+    public List<Categoria> listarTodas() {
+
+        List<CategoriaEntity> categoriaList;
+
+        try {
+            categoriaList = repository.findAll();
+        } catch (Exception e) {
+            throw new DataProviderException(MENSAGEM_ERRO_LISTAR_CATEGORIAS, e);
+        }
+
+        return categoriaList.stream()
+                .map(mapper::paraDomain).toList();
     }
 }

@@ -6,11 +6,10 @@ import com.whatsapp.financeiro.entrypoint.dtos.ResponseDto;
 import com.whatsapp.financeiro.entrypoint.mappers.CategoriaMapperEntry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/categorias")
@@ -33,5 +32,14 @@ public class CategoriaController {
                         .buildAndExpand(categoriaSalva.getId())
                         .toUri()
         ).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseDto<List<CategoriaDto>>> listarTodasCategorias() {
+        List<CategoriaDto> categoriaDtoList = service.listarTodasCategorias().stream()
+                .map(mapper::paraDto).toList();
+
+        ResponseDto<List<CategoriaDto>> response = new ResponseDto<>(categoriaDtoList);
+        return ResponseEntity.ok(response);
     }
 }
