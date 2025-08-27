@@ -1,10 +1,15 @@
 package com.whatsapp.financeiro.application.gateways;
 
 import com.whatsapp.financeiro.domain.Categoria;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public interface CategoriaGateway {
     Categoria salvar(Categoria categoriaCriada);
-    List<Categoria> listarTodas();
+    Page<Categoria> buscarTodas(Pageable pageable);
+    Optional<Categoria> buscarPorId(UUID id);
+    void deletar(UUID id);
 }
