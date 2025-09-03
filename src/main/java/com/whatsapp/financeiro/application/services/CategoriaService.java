@@ -24,6 +24,9 @@ public class CategoriaService {
     private final CategoriaGateway gateway;
     private final ClienteService clienteService;
 
+    public static final String ERRO_CATEGORIA_NAO_ENCONTRADA = "Erro ao buscar por id";
+    public static final String ERRO_ALTERAR_CAMPO = "Erro ao alterar campo: ";
+
     public Categoria criarCategoria(Categoria categoriaCriada) {
         log.info("Criando categoria. Categoria: {}", categoriaCriada.toString());
 
@@ -51,7 +54,7 @@ public class CategoriaService {
         Optional<Categoria> categoriaOptional = gateway.buscarPorId(id);
 
         if (categoriaOptional.isEmpty()) {
-            throw new CategoriaNaoEncontradaException("Erro ao buscar por id");
+            throw new CategoriaNaoEncontradaException(ERRO_CATEGORIA_NAO_ENCONTRADA);
         }
 
         log.info("Categoria buscada com sucesso! Categoria: {}", categoriaOptional.get());
@@ -73,7 +76,7 @@ public class CategoriaService {
                 field.set(categoriaBuscada, valor);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 log.error("Erro ao alterar campo: {}", nome, e);
-                throw new AlterarCamposException("Erro ao alterar campo: " + nome, e);
+                throw new AlterarCamposException(ERRO_ALTERAR_CAMPO + nome, e);
             }
         });
 
