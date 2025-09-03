@@ -2,7 +2,10 @@ package com.whatsapp.financeiro.builders;
 
 import com.whatsapp.financeiro.domain.Categoria;
 import com.whatsapp.financeiro.infrastructure.repositories.entities.CategoriaEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
+import java.util.List;
 import java.util.UUID;
 
 public class CategoriaBuilder {
@@ -23,5 +26,29 @@ public class CategoriaBuilder {
                 .descricao("descricao boa sim bão")
                 .cliente(ClienteBuilder.criarClienteEntity())
                 .build();
+    }
+
+    public static Page<Categoria> criarPageDeCategoria() {
+        return new PageImpl<>(List.of(
+                criarCategoria(),
+                Categoria.builder()
+                        .id(UUID.fromString("51ad1798-ce2a-5a35-0537-f355e80a5737"))
+                        .titulo("outro titulo")
+                        .descricao("outra boa descricao")
+                        .cliente(ClienteBuilder.criarCliente())
+                        .build()
+        ));
+    }
+
+    public static Page<CategoriaEntity> criarPageDeCategoriaEntity() {
+        return new PageImpl<>(List.of(
+                criarCategoriaEntity(),
+                CategoriaEntity.builder()
+                        .id(UUID.fromString("51ad1798-ce2a-5a35-0537-f355e80a5737"))
+                        .titulo("outro titulo")
+                        .descricao("outra boa descricao")
+                        .cliente(ClienteBuilder.criarClienteEntity())
+                        .build()
+        ));
     }
 }

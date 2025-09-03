@@ -8,5 +8,6 @@ public class ClienteBuilder {
     }
 
     public static ClienteEntity criarClienteEntity() {
+        return null;
     }
 }
