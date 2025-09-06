@@ -3,14 +3,12 @@ package com.whatsapp.financeiro.entrypoint.dtos;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.UUID;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @ToString
 @Builder

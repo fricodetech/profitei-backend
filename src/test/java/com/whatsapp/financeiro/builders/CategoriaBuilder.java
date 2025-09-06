@@ -1,6 +1,7 @@
 package com.whatsapp.financeiro.builders;
 
 import com.whatsapp.financeiro.domain.Categoria;
+import com.whatsapp.financeiro.entrypoint.dtos.CategoriaDto;
 import com.whatsapp.financeiro.infrastructure.repositories.entities.CategoriaEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -9,6 +10,15 @@ import java.util.List;
 import java.util.UUID;
 
 public class CategoriaBuilder {
+
+    public static CategoriaDto criarCategoriaDto() {
+        return CategoriaDto.builder()
+                .id(UUID.fromString("41ad1798-be2a-4a35-9537-e355e80a5737"))
+                .titulo("titulo bom")
+                .descricao("descricao boa sim bao")
+                .cliente(ClienteBuilder.criarClienteDto())
+                .build();
+    }
 
     public static Categoria criarCategoria() {
         return Categoria.builder()
@@ -51,4 +61,6 @@ public class CategoriaBuilder {
                         .build()
         ));
     }
+
+
 }

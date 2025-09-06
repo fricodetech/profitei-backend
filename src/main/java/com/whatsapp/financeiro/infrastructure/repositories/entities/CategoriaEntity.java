@@ -9,6 +9,7 @@ import java.util.UUID;
 @Entity(name = "Categoria")
 @Table(name = "categorias")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
