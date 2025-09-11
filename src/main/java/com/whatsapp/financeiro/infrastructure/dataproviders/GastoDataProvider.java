@@ -1,6 +1,6 @@
 package com.whatsapp.financeiro.infrastructure.dataproviders;
 
-import com.whatsapp.financeiro.application.GastoGateway;
+import com.whatsapp.financeiro.application.gateways.GastoGateway;
 import com.whatsapp.financeiro.domain.Gasto;
 import com.whatsapp.financeiro.infrastructure.exception.DataProviderException;
 import com.whatsapp.financeiro.infrastructure.mappers.GastoMapperInfra;
@@ -19,6 +19,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class GastoDataProvider implements GastoGateway {
+
     private final GastoRepository repository;
     private final GastoMapperInfra mapper;
 
@@ -43,7 +44,7 @@ public class GastoDataProvider implements GastoGateway {
     }
 
     @Override
-    public Page<Gasto> buscarTodas(Pageable pageable) {
+    public Page<Gasto> buscarTodos(Pageable pageable) {
         Page<GastoEntity> gastoPage;
 
         try {
@@ -58,16 +59,16 @@ public class GastoDataProvider implements GastoGateway {
 
     @Override
     public Optional<Gasto> buscarPorId(UUID id) {
-        Optional<GastoEntity> gastoBuscada;
+        Optional<GastoEntity> gastoBuscado;
 
         try {
-            gastoBuscada = repository.findById(id);
+            gastoBuscado = repository.findById(id);
         } catch (Exception e) {
             log.error(MENSAGEM_ERRO_BUSCAR_GASTO_POR_ID, e);
             throw new DataProviderException(MENSAGEM_ERRO_BUSCAR_GASTO_POR_ID, e);
         }
 
-        return gastoBuscada.map(mapper::paraDomain);
+        return gastoBuscado.map(mapper::paraDomain);
     }
 
     @Override

@@ -16,6 +16,7 @@ import java.util.UUID;
 @ToString
 @Builder
 public class GastoEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_gasto")
