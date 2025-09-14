@@ -11,6 +11,7 @@ public class UsuarioMapper {
                 .nome(domain.getNome())
                 .email(domain.getEmail())
                 .telefone(domain.getTelefone())
+                .senha(domain.getSenha())
                 .build();
     }
 
@@ -20,6 +21,7 @@ public class UsuarioMapper {
                 .nome(dto.getNome())
                 .email(dto.getEmail())
                 .telefone(dto.getTelefone())
+                .senha(dto.getSenha())
                 .build();
     }
 }
