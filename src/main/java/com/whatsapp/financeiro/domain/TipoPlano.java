@@ -9,6 +9,6 @@ public enum TipoPlano {
     BASICO(1, "Basico"),
     PREMIUM(2, "Premium");
 
-    private Integer id;
-    private String nome;
+    private final Integer id;
+    private final String nome;
 }

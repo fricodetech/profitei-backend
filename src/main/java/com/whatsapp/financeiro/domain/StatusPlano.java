@@ -9,6 +9,6 @@ public enum StatusPlano {
     ATIVO(1, "Ativo"),
     INATIVO(2, "Inativo");
 
-    private Integer id;
-    private String nome;
+    private final Integer id;
+    private final String nome;
 }

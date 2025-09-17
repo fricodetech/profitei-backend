@@ -14,4 +14,9 @@ public class Categoria {
     private String titulo;
     private String descricao;
     private Cliente cliente;
+
+    public void alterarAtributos(Categoria novo) {
+        this.setDescricao(novo.getDescricao());
+        this.setTitulo(novo.getTitulo());
+    }
 }

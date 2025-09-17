@@ -8,6 +8,7 @@ import java.util.UUID;
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Builder
 public class Cliente {

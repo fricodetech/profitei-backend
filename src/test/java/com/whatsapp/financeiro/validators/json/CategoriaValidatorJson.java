@@ -1,11 +1,9 @@
 package com.whatsapp.financeiro.validators.json;
 
-import com.whatsapp.financeiro.domain.Categoria;
-import com.whatsapp.financeiro.entrypoint.dtos.CategoriaDto;
+import com.whatsapp.financeiro.entrypoint.dto.CategoriaDto;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
 
 public class CategoriaValidatorJson {
     public static void validaCategoriaJson(ResultActions resultado, CategoriaDto esperado) throws Exception {
