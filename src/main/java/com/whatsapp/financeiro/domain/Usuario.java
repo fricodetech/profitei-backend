@@ -15,6 +15,7 @@ public class Usuario {
     private String email;
     private String telefone;
     private String senha;
+    private Plano plano;
 
     public void setDados(Usuario novosDados) {
         this.nome = novosDados.getNome();

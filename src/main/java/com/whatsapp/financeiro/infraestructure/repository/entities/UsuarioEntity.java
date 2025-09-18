@@ -21,4 +21,5 @@ public class UsuarioEntity {
     private String email;
     private String telefone;
     private String senha;
+    private PlanoEntity plano;
 }

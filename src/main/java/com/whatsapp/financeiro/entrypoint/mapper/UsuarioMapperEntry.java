@@ -3,7 +3,7 @@ package com.whatsapp.financeiro.entrypoint.mapper;
 import com.whatsapp.financeiro.domain.Usuario;
 import com.whatsapp.financeiro.entrypoint.dto.UsuarioDto;
 
-public class UsuarioMapper {
+public class UsuarioMapperEntry {
 
     public static UsuarioDto paraDto(Usuario domain) {
         return UsuarioDto.builder()
@@ -12,6 +12,7 @@ public class UsuarioMapper {
                 .email(domain.getEmail())
                 .telefone(domain.getTelefone())
                 .senha(domain.getSenha())
+                .plano(PlanoMapperEntry.paraDto(domain.getPlano()))
                 .build();
     }
 
@@ -22,6 +23,7 @@ public class UsuarioMapper {
                 .email(dto.getEmail())
                 .telefone(dto.getTelefone())
                 .senha(dto.getSenha())
+                .plano(PlanoMapperEntry.paraDomain(dto.getPlano()))
                 .build();
     }
 }

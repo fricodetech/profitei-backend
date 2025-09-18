@@ -3,7 +3,7 @@ package com.whatsapp.financeiro.infraestructure.dataprovider;
 import com.whatsapp.financeiro.application.gateway.UsuarioGateway;
 import com.whatsapp.financeiro.domain.Usuario;
 import com.whatsapp.financeiro.infraestructure.exceptions.DataProviderException;
-import com.whatsapp.financeiro.infraestructure.mapper.UsuarioMapper;
+import com.whatsapp.financeiro.infraestructure.mapper.UsuarioMapperInfra;
 import com.whatsapp.financeiro.infraestructure.repository.UsuarioRepository;
 import com.whatsapp.financeiro.infraestructure.repository.entities.UsuarioEntity;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class UsuarioDataProvider implements UsuarioGateway {
 
     @Override
     public Usuario salvar(Usuario novoUsuario) {
-        UsuarioEntity usuario = UsuarioMapper.paraEntity(novoUsuario);
+        UsuarioEntity usuario = UsuarioMapperInfra.paraEntity(novoUsuario);
 
         try {
             usuario = repository.save(usuario);
@@ -36,7 +36,7 @@ public class UsuarioDataProvider implements UsuarioGateway {
             throw new DataProviderException(MENSAGEM_ERRO_SALVAR_USUARIO, ex.getCause());
         }
 
-        return UsuarioMapper.paraDomain(usuario);
+        return UsuarioMapperInfra.paraDomain(usuario);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class UsuarioDataProvider implements UsuarioGateway {
             log.error(MENSAGEM_ERRO_CONSULTAR_POR_ID, ex);
             throw new DataProviderException(MENSAGEM_ERRO_CONSULTAR_POR_ID, ex.getCause());
         }
-        return usuario.map(UsuarioMapper::paraDomain);
+        return usuario.map(UsuarioMapperInfra::paraDomain);
     }
 
     @Override
@@ -73,6 +73,6 @@ public class UsuarioDataProvider implements UsuarioGateway {
             throw new DataProviderException(MENSAGEM_ERRO_CONSULTAR_POR_TELEFONE, ex.getCause());
         }
 
-        return usuario.map(UsuarioMapper::paraDomain);
+        return usuario.map(UsuarioMapperInfra::paraDomain);
     }
 }

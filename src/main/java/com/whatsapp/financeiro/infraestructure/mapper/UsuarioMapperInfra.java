@@ -3,7 +3,7 @@ package com.whatsapp.financeiro.infraestructure.mapper;
 import com.whatsapp.financeiro.domain.Usuario;
 import com.whatsapp.financeiro.infraestructure.repository.entities.UsuarioEntity;
 
-public class UsuarioMapper {
+public class UsuarioMapperInfra {
     public static UsuarioEntity paraEntity(Usuario domain) {
         return UsuarioEntity.builder()
                 .id(domain.getId())
@@ -11,6 +11,7 @@ public class UsuarioMapper {
                 .email(domain.getEmail())
                 .telefone(domain.getTelefone())
                 .senha(domain.getSenha())
+                .plano(PlanoMapperInfra.paraEntity(domain.getPlano()))
                 .build();
     }
 
@@ -22,6 +23,7 @@ public class UsuarioMapper {
                 .email(entity.getEmail())
                 .telefone(entity.getTelefone())
                 .senha(entity.getSenha())
+                .plano(PlanoMapperInfra.paraDomain(entity.getPlano()))
                 .build();
     }
 }

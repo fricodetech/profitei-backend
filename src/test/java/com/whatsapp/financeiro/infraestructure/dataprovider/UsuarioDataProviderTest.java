@@ -2,7 +2,7 @@ package com.whatsapp.financeiro.infraestructure.dataprovider;
 
 import com.whatsapp.financeiro.domain.Usuario;
 import com.whatsapp.financeiro.infraestructure.exceptions.DataProviderException;
-import com.whatsapp.financeiro.infraestructure.mapper.UsuarioMapper;
+import com.whatsapp.financeiro.infraestructure.mapper.UsuarioMapperInfra;
 import com.whatsapp.financeiro.infraestructure.repository.UsuarioRepository;
 import com.whatsapp.financeiro.infraestructure.repository.entities.UsuarioEntity;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +42,7 @@ class UsuarioDataProviderTest {
                 .telefone("11999999999")
                 .build();
 
-        usuarioEntity = UsuarioMapper.paraEntity(usuario);
+        usuarioEntity = UsuarioMapperInfra.paraEntity(usuario);
     }
 
     // --- salvar() ---

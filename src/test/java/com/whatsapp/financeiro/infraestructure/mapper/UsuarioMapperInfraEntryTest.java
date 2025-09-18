@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class UsuarioMapperTest {
+class UsuarioMapperInfraEntryTest {
 
     private Usuario usuarioDomain;
     private UsuarioEntity usuarioEntity;
@@ -20,7 +20,7 @@ class UsuarioMapperTest {
 
     @Test
     void deveRetornarEntityComSucesso() {
-        UsuarioEntity resultado = UsuarioMapper.paraEntity(usuarioDomain);
+        UsuarioEntity resultado = UsuarioMapperInfra.paraEntity(usuarioDomain);
         Assertions.assertEquals(resultado.getId(), usuarioDomain.getId());
         Assertions.assertEquals(resultado.getNome(), usuarioDomain.getNome());
         Assertions.assertEquals(resultado.getEmail(), usuarioDomain.getEmail());
@@ -30,7 +30,7 @@ class UsuarioMapperTest {
 
     @Test
     void deveRetornarDomainComSucesso() {
-        Usuario resultado = UsuarioMapper.paraDomain(usuarioEntity);
+        Usuario resultado = UsuarioMapperInfra.paraDomain(usuarioEntity);
         Assertions.assertEquals(resultado.getId(), usuarioEntity.getId());
         Assertions.assertEquals(resultado.getNome(), usuarioEntity.getNome());
         Assertions.assertEquals(resultado.getEmail(), usuarioEntity.getEmail());

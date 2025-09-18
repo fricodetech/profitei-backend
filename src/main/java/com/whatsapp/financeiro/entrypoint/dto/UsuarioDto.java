@@ -39,4 +39,7 @@ public class UsuarioDto {
             message = "A senha deve conter pelo menos uma letra, um número e um caractere especial.")
     @JsonProperty("senha")
     private String senha;
+
+    @NotBlank(message = "Plano é obrigatório")
+    private PlanoDto plano;
 }
