@@ -1,4 +1,4 @@
-package com.whatsapp.financeiro.infrastructure.repositories.entities;
+package com.whatsapp.financeiro.infrastructure.repository.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,10 +11,10 @@ import java.util.UUID;
 @Table(name = "gastos")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@NoArgsConstructor
 @Builder
+@ToString
 public class GastoEntity {
 
     @Id
@@ -32,6 +32,6 @@ public class GastoEntity {
     private CategoriaEntity categoria;
 
     @ManyToOne
-    @JoinColumn(name = "id_cliente")
-    private ClienteEntity cliente;
+    @JoinColumn(name = "id_usuario")
+    private UsuarioEntity usuario;
 }

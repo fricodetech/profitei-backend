@@ -1,7 +1,5 @@
 package com.whatsapp.financeiro.domain;
 
-import com.whatsapp.financeiro.infrastructure.repositories.entities.CategoriaEntity;
-import com.whatsapp.financeiro.infrastructure.repositories.entities.ClienteEntity;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -17,6 +15,12 @@ public class Gasto {
     private UUID id;
     private BigDecimal valor;
     private LocalDate dataGasto;
-    private CategoriaEntity categoria;
-    private ClienteEntity cliente;
+    private Categoria categoria;
+    private Usuario usuario;
+
+    public void alterarDados(Gasto novo) {
+        this.valor = novo.getValor();
+        this.dataGasto = novo.getDataGasto();
+        this.categoria = novo.getCategoria();
+    }
 }

@@ -1,7 +1,7 @@
-package com.whatsapp.financeiro.infraestructure.mapper;
+package com.whatsapp.financeiro.infrastructure.mapper;
 
 import com.whatsapp.financeiro.domain.Plano;
-import com.whatsapp.financeiro.infraestructure.repository.entities.PlanoEntity;
+import com.whatsapp.financeiro.infrastructure.repository.entities.PlanoEntity;
 
 public class PlanoMapperInfra {
     public static PlanoEntity paraEntity(Plano plano) {

@@ -1,11 +1,11 @@
-package com.whatsapp.financeiro.infrastructure.dataproviders;
+package com.whatsapp.financeiro.infrastructure.dataprovider;
 
-import com.whatsapp.financeiro.application.gateways.GastoGateway;
+import com.whatsapp.financeiro.application.gateway.GastoGateway;
 import com.whatsapp.financeiro.domain.Gasto;
-import com.whatsapp.financeiro.infrastructure.exception.DataProviderException;
-import com.whatsapp.financeiro.infrastructure.mappers.GastoMapperInfra;
-import com.whatsapp.financeiro.infrastructure.repositories.GastoRepository;
-import com.whatsapp.financeiro.infrastructure.repositories.entities.GastoEntity;
+import com.whatsapp.financeiro.infrastructure.exceptions.DataProviderException;
+import com.whatsapp.financeiro.infrastructure.mapper.GastoMapperInfra;
+import com.whatsapp.financeiro.infrastructure.repository.GastoRepository;
+import com.whatsapp.financeiro.infrastructure.repository.entities.GastoEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,6 @@ import java.util.UUID;
 public class GastoDataProvider implements GastoGateway {
 
     private final GastoRepository repository;
-    private final GastoMapperInfra mapper;
 
     public static final String MENSAGEM_ERRO_SALVAR_GASTO = "Erro ao salvar o gasto.";
     public static final String MENSAGEM_ERRO_BUSCAR_GASTOS = "Erro ao buscar todas os gastos.";
@@ -31,7 +30,7 @@ public class GastoDataProvider implements GastoGateway {
 
     @Override
     public Gasto salvar(Gasto gastoCriado) {
-        GastoEntity gastoEntity = mapper.paraEntity(gastoCriado);
+        GastoEntity gastoEntity = GastoMapperInfra.paraEntity(gastoCriado);
 
         try {
             gastoEntity = repository.save(gastoEntity);
@@ -40,11 +39,11 @@ public class GastoDataProvider implements GastoGateway {
             throw new DataProviderException(MENSAGEM_ERRO_SALVAR_GASTO, e);
         }
 
-        return mapper.paraDomain(gastoEntity);
+        return GastoMapperInfra.paraDomain(gastoEntity);
     }
 
     @Override
-    public Page<Gasto> buscarTodos(Pageable pageable) {
+    public Page<Gasto> consultarTodos(Pageable pageable) {
         Page<GastoEntity> gastoPage;
 
         try {
@@ -54,11 +53,11 @@ public class GastoDataProvider implements GastoGateway {
             throw new DataProviderException(MENSAGEM_ERRO_BUSCAR_GASTOS, e);
         }
 
-        return gastoPage.map(mapper::paraDomain);
+        return gastoPage.map(GastoMapperInfra::paraDomain);
     }
 
     @Override
-    public Optional<Gasto> buscarPorId(UUID id) {
+    public Optional<Gasto> consultarPorId(UUID id) {
         Optional<GastoEntity> gastoBuscado;
 
         try {
@@ -68,7 +67,7 @@ public class GastoDataProvider implements GastoGateway {
             throw new DataProviderException(MENSAGEM_ERRO_BUSCAR_GASTO_POR_ID, e);
         }
 
-        return gastoBuscado.map(mapper::paraDomain);
+        return gastoBuscado.map(GastoMapperInfra::paraDomain);
     }
 
     @Override

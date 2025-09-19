@@ -1,6 +1,6 @@
-package com.whatsapp.financeiro.infraestructure.repository;
+package com.whatsapp.financeiro.infrastructure.repository;
 
-import com.whatsapp.financeiro.infraestructure.repository.entities.UsuarioEntity;
+import com.whatsapp.financeiro.infrastructure.repository.entities.UsuarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

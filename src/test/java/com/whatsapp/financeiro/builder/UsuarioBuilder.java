@@ -2,7 +2,7 @@ package com.whatsapp.financeiro.builder;
 
 import com.whatsapp.financeiro.domain.Usuario;
 import com.whatsapp.financeiro.entrypoint.dto.UsuarioDto;
-import com.whatsapp.financeiro.infraestructure.repository.entities.UsuarioEntity;
+import com.whatsapp.financeiro.infrastructure.repository.entities.UsuarioEntity;
 
 import java.util.UUID;
 
