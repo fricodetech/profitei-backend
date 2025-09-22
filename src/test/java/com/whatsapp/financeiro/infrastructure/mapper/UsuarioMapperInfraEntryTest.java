@@ -1,9 +1,8 @@
-package com.whatsapp.financeiro.infraestructure.mapper;
+package com.whatsapp.financeiro.infrastructure.mapper;
 
 import com.whatsapp.financeiro.builder.UsuarioBuilder;
 import com.whatsapp.financeiro.domain.Usuario;
 import com.whatsapp.financeiro.infrastructure.repository.entities.UsuarioEntity;
-import com.whatsapp.financeiro.infrastructure.mapper.UsuarioMapperInfra;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

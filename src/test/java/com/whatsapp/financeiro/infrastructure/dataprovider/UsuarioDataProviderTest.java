@@ -1,11 +1,10 @@
-package com.whatsapp.financeiro.infraestructure.dataprovider;
+package com.whatsapp.financeiro.infrastructure.dataprovider;
 
 import com.whatsapp.financeiro.domain.Usuario;
 import com.whatsapp.financeiro.infraestructure.exceptions.DataProviderException;
 import com.whatsapp.financeiro.infrastructure.mapper.UsuarioMapperInfra;
 import com.whatsapp.financeiro.infrastructure.repository.UsuarioRepository;
 import com.whatsapp.financeiro.infrastructure.repository.entities.UsuarioEntity;
-import com.whatsapp.financeiro.infrastructure.dataprovider.UsuarioDataProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -24,6 +24,7 @@ public class GastoService {
     private final CategoriaService categoriaService;
 
     public Gasto salvarGasto(Gasto gastoNovo) {
+        log.info("Iniciando processo de salvamento. Gasto: {}", gastoNovo);
 
         Categoria categoriaConsultada = categoriaService.buscarCategoriaPorId(gastoNovo.getCategoria().getId());
         gastoNovo.setCategoria(categoriaConsultada);
@@ -33,6 +34,7 @@ public class GastoService {
 
         Gasto gastoSalvo = gateway.salvar(gastoNovo);
 
+        log.info("Gasto salvo com sucesso. Gasto: {}", gastoSalvo);
         return gastoSalvo;
     }
 
