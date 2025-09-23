@@ -1,4 +1,4 @@
-package com.whatsapp.financeiro.infraestructure.repository.entities;
+package com.whatsapp.financeiro.infrastructure.repository.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

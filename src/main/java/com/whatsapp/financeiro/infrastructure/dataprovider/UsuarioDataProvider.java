@@ -1,11 +1,11 @@
-package com.whatsapp.financeiro.infraestructure.dataprovider;
+package com.whatsapp.financeiro.infrastructure.dataprovider;
 
 import com.whatsapp.financeiro.application.gateway.UsuarioGateway;
 import com.whatsapp.financeiro.domain.Usuario;
 import com.whatsapp.financeiro.infraestructure.exceptions.DataProviderException;
-import com.whatsapp.financeiro.infraestructure.mapper.UsuarioMapperInfra;
-import com.whatsapp.financeiro.infraestructure.repository.UsuarioRepository;
-import com.whatsapp.financeiro.infraestructure.repository.entities.UsuarioEntity;
+import com.whatsapp.financeiro.infrastructure.mapper.UsuarioMapperInfra;
+import com.whatsapp.financeiro.infrastructure.repository.UsuarioRepository;
+import com.whatsapp.financeiro.infrastructure.repository.entities.UsuarioEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

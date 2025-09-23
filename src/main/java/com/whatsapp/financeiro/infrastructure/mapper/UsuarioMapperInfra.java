@@ -1,7 +1,7 @@
-package com.whatsapp.financeiro.infraestructure.mapper;
+package com.whatsapp.financeiro.infrastructure.mapper;
 
 import com.whatsapp.financeiro.domain.Usuario;
-import com.whatsapp.financeiro.infraestructure.repository.entities.UsuarioEntity;
+import com.whatsapp.financeiro.infrastructure.repository.entities.UsuarioEntity;
 
 public class UsuarioMapperInfra {
     public static UsuarioEntity paraEntity(Usuario domain) {
