@@ -43,7 +43,7 @@ public class CategoriaDataProvider implements CategoriaGateway {
     }
 
     @Override
-    public Page<Categoria> buscarTodas(Pageable pageable) {
+    public Page<Categoria> consultarTodas(Pageable pageable) {
         Page<CategoriaEntity> categoriaPage;
 
         try {
@@ -57,7 +57,7 @@ public class CategoriaDataProvider implements CategoriaGateway {
     }
 
     @Override
-    public Optional<Categoria> buscarPorId(UUID id) {
+    public Optional<Categoria> consultarPorId(UUID id) {
         Optional<CategoriaEntity> categoriaBuscada;
 
         try {

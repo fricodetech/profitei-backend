@@ -13,6 +13,7 @@ import java.util.UUID;
 @ToString
 @Builder
 public class CategoriaDto {
+
     private UUID id;
 
     @NotBlank(message = "O titulo não pode ser vazio.")
@@ -22,6 +23,6 @@ public class CategoriaDto {
     @Size(max = 255, message = "A descrição pode ter no máximo 255 caracteres.")
     private String descricao;
 
-    @NotNull(message = "O cliente não pode ser nulo.")
-    private ClienteDto cliente;
+    @NotNull(message = "O usuario não pode ser nulo.")
+    private UsuarioDto usuario;
 }

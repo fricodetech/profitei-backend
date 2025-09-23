@@ -12,6 +12,7 @@ public class UsuarioMapperEntry {
                 .email(domain.getEmail())
                 .telefone(domain.getTelefone())
                 .senha(domain.getSenha())
+                .dataCriacao(domain.getDataCriacao())
                 .plano(PlanoMapperEntry.paraDto(domain.getPlano()))
                 .build();
     }
@@ -23,6 +24,7 @@ public class UsuarioMapperEntry {
                 .email(dto.getEmail())
                 .telefone(dto.getTelefone())
                 .senha(dto.getSenha())
+                .dataCriacao(dto.getDataCriacao())
                 .plano(PlanoMapperEntry.paraDomain(dto.getPlano()))
                 .build();
     }

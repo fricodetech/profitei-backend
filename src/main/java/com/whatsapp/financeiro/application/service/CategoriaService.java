@@ -3,7 +3,7 @@ package com.whatsapp.financeiro.application.service;
 import com.whatsapp.financeiro.application.exceptions.CategoriaNaoEncontradaException;
 import com.whatsapp.financeiro.application.gateway.CategoriaGateway;
 import com.whatsapp.financeiro.domain.Categoria;
-import com.whatsapp.financeiro.domain.Cliente;
+import com.whatsapp.financeiro.domain.Usuario;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class CategoriaService {
 
     private final CategoriaGateway gateway;
-    private final ClienteService clienteService;
+    private final UsuarioService usuarioService;
 
     public static final String ERRO_CATEGORIA_NAO_ENCONTRADA = "Erro ao buscar por id";
     public static final String ERRO_ALTERAR_CAMPO = "Erro ao alterar campo: ";
@@ -27,28 +27,28 @@ public class CategoriaService {
     public Categoria criarCategoria(Categoria categoriaCriada) {
         log.info("Criando categoria. Categoria: {}", categoriaCriada.toString());
 
-        Cliente clienteBuscado = clienteService.buscarClientePorId(categoriaCriada.getCliente().getId());
-        categoriaCriada.setCliente(clienteBuscado);
+        Usuario usuarioBuscado = usuarioService.consultarPorId(categoriaCriada.getUsuario().getId());
+        categoriaCriada.setUsuario(usuarioBuscado);
 
         Categoria categoriaSalva = gateway.salvar(categoriaCriada);
 
-        log.info("Categoria criado com sucesso! Categoria: {}", categoriaSalva.toString());
+        log.info("Categoria criada com sucesso! Categoria: {}", categoriaSalva.toString());
         return categoriaSalva;
     }
 
-    public Page<Categoria> buscarTodasCategorias(Pageable pageable) {
+    public Page<Categoria> consultarTodasCategorias(Pageable pageable) {
         log.info("Buscando todas as categorias salvas.");
 
-        Page<Categoria> categoriaPage = gateway.buscarTodas(pageable);
+        Page<Categoria> categoriaPage = gateway.consultarTodas(pageable);
 
         log.info("Categorias buscadas com sucesso! Categorias: {}", categoriaPage.getTotalElements());
         return categoriaPage;
     }
 
-    public Categoria buscarCategoriaPorId(UUID id) {
+    public Categoria consultarCategoriaPorId(UUID id) {
         log.info("Buscando categoria por id. Id: {}", id);
 
-        Optional<Categoria> categoriaOptional = gateway.buscarPorId(id);
+        Optional<Categoria> categoriaOptional = gateway.consultarPorId(id);
 
         if (categoriaOptional.isEmpty()) {
             throw new CategoriaNaoEncontradaException(ERRO_CATEGORIA_NAO_ENCONTRADA);
@@ -61,7 +61,7 @@ public class CategoriaService {
     public Categoria alterarCategoria(UUID id, Categoria categoriaNova) {
         log.info("Alterando categoria por id. Id: {}, Categoria nova: {}", id, categoriaNova);
 
-        Categoria categoriaBuscada = this.buscarCategoriaPorId(id);
+        Categoria categoriaBuscada = this.consultarCategoriaPorId(id);
 
         categoriaBuscada.alterarAtributos(categoriaNova);
 
@@ -74,7 +74,7 @@ public class CategoriaService {
     public void deletarCategoria(UUID id) {
         log.info("Deletando categoria por id. Id: {}", id);
 
-        buscarCategoriaPorId(id);
+        consultarCategoriaPorId(id);
         gateway.deletar(id);
 
         log.info("Categoria deletada com sucesso!");

@@ -26,6 +26,7 @@ public class CategoriaController {
 
     @PostMapping
     public ResponseEntity<ResponseDto<CategoriaDto>> criarCategoria(@RequestBody @Valid CategoriaDto categoriaCriada) {
+
         CategoriaDto categoriaSalva = CategoriaMapperEntry.paraDto(
                 service.criarCategoria(CategoriaMapperEntry.paraDomain(categoriaCriada)));
 
@@ -40,22 +41,24 @@ public class CategoriaController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDto<Page<CategoriaDto>>> buscarTodasCategorias(
+    public ResponseEntity<ResponseDto<Page<CategoriaDto>>> consultarTodasCategorias(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "titulo") String sort
     ) {
+
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
 
-        Page<CategoriaDto> categoriaPage = service.buscarTodasCategorias(pageable).map(CategoriaMapperEntry::paraDto);
+        Page<CategoriaDto> categoriaPage = service.consultarTodasCategorias(pageable).map(CategoriaMapperEntry::paraDto);
 
         ResponseDto<Page<CategoriaDto>> response = new ResponseDto<>(categoriaPage);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseDto<CategoriaDto>> buscarCategoriaPorId(@PathVariable UUID id) {
-        CategoriaDto categoriaBuscada = CategoriaMapperEntry.paraDto(service.buscarCategoriaPorId(id));
+    public ResponseEntity<ResponseDto<CategoriaDto>> consultarCategoriaPorId(@PathVariable UUID id) {
+
+        CategoriaDto categoriaBuscada = CategoriaMapperEntry.paraDto(service.consultarCategoriaPorId(id));
 
         ResponseDto<CategoriaDto> response = new ResponseDto<>(categoriaBuscada);
         return ResponseEntity.ok(response);
@@ -63,6 +66,7 @@ public class CategoriaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDto<CategoriaDto>> alterarCategoria(@PathVariable UUID id, @RequestBody Categoria categoriaNova) {
+
         CategoriaDto categoriaAlterada = CategoriaMapperEntry.paraDto(service.alterarCategoria(id, categoriaNova));
 
         ResponseDto<CategoriaDto> response = new ResponseDto<>(categoriaAlterada);
@@ -71,6 +75,7 @@ public class CategoriaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarCategoria(@PathVariable UUID id) {
+
         service.deletarCategoria(id);
 
         return ResponseEntity.noContent().build();

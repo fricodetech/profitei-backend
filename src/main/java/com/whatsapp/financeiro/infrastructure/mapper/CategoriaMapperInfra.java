@@ -10,7 +10,7 @@ public class CategoriaMapperInfra {
                 .id(domain.getId())
                 .titulo(domain.getTitulo())
                 .descricao(domain.getDescricao())
-                .cliente(ClienteMapperInfra.paraEntity(domain.getCliente()))
+                .usuario(UsuarioMapperInfra.paraEntity(domain.getUsuario()))
                 .build();
     }
 
@@ -19,7 +19,7 @@ public class CategoriaMapperInfra {
                 .id(entity.getId())
                 .titulo(entity.getTitulo())
                 .descricao(entity.getDescricao())
-                .cliente(ClienteMapperInfra.paraDomain(entity.getCliente()))
+                .usuario(UsuarioMapperInfra.paraDomain(entity.getUsuario()))
                 .build();
     }
 }

@@ -11,6 +11,7 @@ public class UsuarioMapperInfra {
                 .email(domain.getEmail())
                 .telefone(domain.getTelefone())
                 .senha(domain.getSenha())
+                .dataCriacao(domain.getDataCriacao())
                 .plano(PlanoMapperInfra.paraEntity(domain.getPlano()))
                 .build();
     }
@@ -23,6 +24,7 @@ public class UsuarioMapperInfra {
                 .email(entity.getEmail())
                 .telefone(entity.getTelefone())
                 .senha(entity.getSenha())
+                .dataCriacao(entity.getDataCriacao())
                 .plano(PlanoMapperInfra.paraDomain(entity.getPlano()))
                 .build();
     }

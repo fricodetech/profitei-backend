@@ -1,15 +1,13 @@
 package com.whatsapp.financeiro.entrypoint.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -39,6 +37,10 @@ public class UsuarioDto {
             message = "A senha deve conter pelo menos uma letra, um número e um caractere especial.")
     @JsonProperty("senha")
     private String senha;
+
+    @NotNull(message = "A data de criação é obrigatória")
+    @PastOrPresent(message = "A data de criação não pode ser no futuro")
+    private LocalDate dataCriacao;
 
     @NotBlank(message = "Plano é obrigatório")
     private PlanoDto plano;
