@@ -1,13 +1,9 @@
 package com.whatsapp.financeiro.application.service;
 
-import com.whatsapp.financeiro.application.exceptions.GastoNaoEncontradoException;
-import com.whatsapp.financeiro.application.gateway.GastoGateway;
-import com.whatsapp.financeiro.builder.CategoriaBuilder;
+import com.whatsapp.financeiro.application.exceptions.OperacaoNaoEncontradaException;
+import com.whatsapp.financeiro.application.gateway.OperacaoGateway;
 import com.whatsapp.financeiro.builder.GastoBuilder;
-import com.whatsapp.financeiro.builder.UsuarioBuilder;
-import com.whatsapp.financeiro.domain.Categoria;
-import com.whatsapp.financeiro.domain.Gasto;
-import com.whatsapp.financeiro.domain.Usuario;
+import com.whatsapp.financeiro.domain.Operacao;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +22,7 @@ import java.util.UUID;
 public class GastoServiceTest {
 
     @Mock
-    private GastoGateway gateway;
+    private OperacaoGateway gateway;
 
     @Mock
     private UsuarioService usuarioService;
@@ -35,12 +31,12 @@ public class GastoServiceTest {
     private CategoriaService categoriaService;
 
     @Captor
-    private ArgumentCaptor<Gasto> captor;
+    private ArgumentCaptor<Operacao> captor;
 
     @InjectMocks
-    private GastoService service;
+    private OperacaoService service;
 
-    private Gasto gastoDomainTeste;
+    private Operacao gastoDomainTeste;
     private Pageable pageable;
     private UUID id;
 
@@ -60,8 +56,8 @@ public class GastoServiceTest {
 
         gastoDomainTeste.setId(null);
 
-        Gasto resultado = service.salvarGasto(gastoDomainTeste);
-        Gasto gastoCapturado = captor.getValue();
+        Operacao resultado = service.salvarOperacao(gastoDomainTeste);
+        Operacao gastoCapturado = captor.getValue();
 
         Assertions.assertEquals(gastoCapturado.getId(), resultado.getId());
         Mockito.verify(usuarioService).consultarPorId(Mockito.any());
@@ -71,10 +67,10 @@ public class GastoServiceTest {
 
     @Test
     void deveBuscarTodosOsGastosComSucesso() {
-        Page<Gasto> gastoDomainPage = GastoBuilder.criarPageDeGastoDomain();
+        Page<Operacao> gastoDomainPage = GastoBuilder.criarPageDeGastoDomain();
         Mockito.when(gateway.consultarTodos(Mockito.any())).thenReturn(gastoDomainPage);
 
-        Page<Gasto> resultado = service.consultarTodosGastos(pageable);
+        Page<Operacao> resultado = service.consultarTodasOperacoes(pageable);
 
         resultado.forEach(gasto -> Assertions.assertNotNull(gasto.getId()));
         Mockito.verify(gateway).consultarTodos(Mockito.any());
@@ -84,7 +80,7 @@ public class GastoServiceTest {
     void deveBuscarGastoPorIdComSucesso() {
         Mockito.when(gateway.consultarPorId(Mockito.any())).thenReturn(Optional.of(gastoDomainTeste));
 
-        Gasto resultado = service.consultarGastoPorId(id);
+        Operacao resultado = service.consultarOperacaoPorId(id);
 
         Assertions.assertNotNull(resultado.getId());
         Mockito.verify(gateway).consultarPorId(Mockito.any());
@@ -94,24 +90,24 @@ public class GastoServiceTest {
     void deveLancarExceptionGastoNaoEncontrado() {
         Mockito.when(gateway.consultarPorId(Mockito.any())).thenReturn(Optional.empty());
 
-        GastoNaoEncontradoException exception = Assertions.assertThrows(
-                GastoNaoEncontradoException.class,
-                () -> service.consultarGastoPorId(id));
+        OperacaoNaoEncontradaException exception = Assertions.assertThrows(
+                OperacaoNaoEncontradaException.class,
+                () -> service.consultarOperacaoPorId(id));
 
         Assertions.assertEquals("Gasto não encontrado.", exception.getMessage());
     }
 
     @Test
     void deveAlterarGastoComSucesso() {
-        Gasto novosDados = gastoDomainTeste;
+        Operacao novosDados = gastoDomainTeste;
 
         novosDados.setValor(BigDecimal.valueOf(15));
 
         Mockito.when(gateway.consultarPorId(Mockito.any())).thenReturn(Optional.of(gastoDomainTeste));
         Mockito.when(gateway.salvar(captor.capture())).thenReturn(novosDados);
 
-        Gasto resultado = service.alterarGasto(id, novosDados);
-        Gasto gastoCapturado = captor.getValue();
+        Operacao resultado = service.alterarOperacao(id, novosDados);
+        Operacao gastoCapturado = captor.getValue();
 
         Assertions.assertEquals(BigDecimal.valueOf(15), gastoCapturado.getValor());
     }
@@ -121,7 +117,7 @@ public class GastoServiceTest {
         Mockito.when(gateway.consultarPorId(Mockito.any())).thenReturn(Optional.of(gastoDomainTeste));
         Mockito.doNothing().when(gateway).deletar(id);
 
-        service.deletarGasto(id);
+        service.deletarOperacao(id);
 
         Mockito.verify(gateway).deletar(id);
     }

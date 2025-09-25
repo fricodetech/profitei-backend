@@ -2,12 +2,12 @@ package com.whatsapp.financeiro.entrypoint.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whatsapp.financeiro.builder.GastoBuilder;
-import com.whatsapp.financeiro.domain.Gasto;
-import com.whatsapp.financeiro.entrypoint.dto.GastoDto;
-import com.whatsapp.financeiro.entrypoint.mapper.GastoMapperEntry;
-import com.whatsapp.financeiro.infrastructure.mapper.GastoMapperInfra;
-import com.whatsapp.financeiro.infrastructure.repository.GastoRepository;
-import com.whatsapp.financeiro.infrastructure.repository.entities.GastoEntity;
+import com.whatsapp.financeiro.domain.Operacao;
+import com.whatsapp.financeiro.entrypoint.dto.OperacaoDto;
+import com.whatsapp.financeiro.entrypoint.mapper.OperacaoMapperEntry;
+import com.whatsapp.financeiro.infrastructure.mapper.OperacaoMapperInfra;
+import com.whatsapp.financeiro.infrastructure.repository.OperacaoRepository;
+import com.whatsapp.financeiro.infrastructure.repository.entities.OperacaoEntity;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,18 +36,18 @@ class GastoControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
-    private GastoRepository repository;
+    private OperacaoRepository repository;
 
-    private GastoDto gastoDto;
-    private Gasto gastoDomain;
-    private GastoEntity gastoEntity;
+    private OperacaoDto gastoDto;
+    private Operacao gastoDomain;
+    private OperacaoEntity gastoEntity;
     private UUID idGasto;
 
     @BeforeEach
     void setUp() {
         gastoDto = GastoBuilder.criarGastoDto();
-        gastoDomain = GastoMapperEntry.paraDomain(gastoDto);
-        gastoEntity = GastoMapperInfra.paraEntity(gastoDomain);
+        gastoDomain = OperacaoMapperEntry.paraDomain(gastoDto);
+        gastoEntity = OperacaoMapperInfra.paraEntity(gastoDomain);
         idGasto = gastoDto.getId();
     }
 
@@ -69,10 +69,10 @@ class GastoControllerTest {
 
     @Test
     void deveConsultarTodosGastos() throws Exception {
-        Page<Gasto> page = GastoBuilder.criarPageDeGastoDomain();
+        Page<Operacao> page = GastoBuilder.criarPageDeGastoDomain();
 
         Mockito.when(repository.findAll(Mockito.any(Pageable.class)))
-                .thenReturn(page.map(GastoMapperInfra::paraEntity));
+                .thenReturn(page.map(OperacaoMapperInfra::paraEntity));
 
         mockMvc.perform(get("/gastos"))
                 .andExpect(status().isOk())

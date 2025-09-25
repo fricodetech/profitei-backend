@@ -1,16 +1,16 @@
 package com.whatsapp.financeiro.entrypoint.mapper;
 
 import com.whatsapp.financeiro.builder.GastoBuilder;
-import com.whatsapp.financeiro.domain.Gasto;
-import com.whatsapp.financeiro.entrypoint.dto.GastoDto;
+import com.whatsapp.financeiro.domain.Operacao;
+import com.whatsapp.financeiro.entrypoint.dto.OperacaoDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class GastoMapperEntryTest {
 
-    private Gasto gastoDomain;
-    private GastoDto gastoDto;
+    private Operacao gastoDomain;
+    private OperacaoDto gastoDto;
 
     @BeforeEach
     void setUp() {
@@ -20,7 +20,7 @@ public class GastoMapperEntryTest {
 
     @Test
     void deveRetornarDtoComSucesso() {
-        GastoDto resultado = GastoMapperEntry.paraDto(gastoDomain);
+        OperacaoDto resultado = OperacaoMapperEntry.paraDto(gastoDomain);
         Assertions.assertEquals(resultado.getId(), gastoDomain.getId());
         Assertions.assertEquals(resultado.getValor(), gastoDomain.getValor());
         Assertions.assertEquals(resultado.getDataGasto(), gastoDomain.getDataGasto());
@@ -30,7 +30,7 @@ public class GastoMapperEntryTest {
 
     @Test
     void deveRetornarDomainComSucesso() {
-        Gasto resultado = GastoMapperEntry.paraDomain(gastoDto);
+        Operacao resultado = OperacaoMapperEntry.paraDomain(gastoDto);
         Assertions.assertEquals(resultado.getId(), gastoDto.getId());
         Assertions.assertEquals(resultado.getValor(), gastoDto.getValor());
         Assertions.assertEquals(resultado.getDataGasto(), gastoDto.getDataGasto());
