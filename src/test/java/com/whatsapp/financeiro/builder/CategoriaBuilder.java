@@ -16,16 +16,16 @@ public class CategoriaBuilder {
                 .id(UUID.fromString("41ad1798-be2a-4a35-9537-e355e80a5737"))
                 .titulo("titulo bom")
                 .descricao("descricao boa sim bao")
-                .cliente(ClienteBuilder.criarClienteDto())
+                .usuario(UsuarioBuilder.criarUsuarioDto())
                 .build();
     }
 
-    public static Categoria criarCategoria() {
+    public static Categoria criarCategoriaDomain() {
         return Categoria.builder()
                 .id(UUID.fromString("41ad1798-be2a-4a35-9537-e355e80a5737"))
                 .titulo("titulo bom")
                 .descricao("descricao boa sim bao")
-                .cliente(ClienteBuilder.criarCliente())
+                .usuario(UsuarioBuilder.criarUsuarioDomain())
                 .build();
     }
 
@@ -34,18 +34,18 @@ public class CategoriaBuilder {
                 .id(UUID.fromString("41ad1798-be2a-4a35-9537-e355e80a5737"))
                 .titulo("titulo bom")
                 .descricao("descricao boa sim bão")
-                .cliente(ClienteBuilder.criarClienteEntity())
+                .usuario(UsuarioBuilder.criarUsuarioEntity())
                 .build();
     }
 
     public static Page<Categoria> criarPageDeCategoria() {
         return new PageImpl<>(List.of(
-                criarCategoria(),
+                criarCategoriaDomain(),
                 Categoria.builder()
                         .id(UUID.fromString("51ad1798-ce2a-5a35-0537-f355e80a5737"))
                         .titulo("outro titulo")
                         .descricao("outra boa descricao")
-                        .cliente(ClienteBuilder.criarCliente())
+                        .usuario(UsuarioBuilder.criarUsuarioDomain())
                         .build()
         ));
     }
@@ -57,10 +57,8 @@ public class CategoriaBuilder {
                         .id(UUID.fromString("51ad1798-ce2a-5a35-0537-f355e80a5737"))
                         .titulo("outro titulo")
                         .descricao("outra boa descricao")
-                        .cliente(ClienteBuilder.criarClienteEntity())
+                        .usuario(UsuarioBuilder.criarUsuarioEntity())
                         .build()
         ));
     }
-
-
 }

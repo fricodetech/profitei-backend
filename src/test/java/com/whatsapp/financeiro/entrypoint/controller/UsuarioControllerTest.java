@@ -43,8 +43,8 @@ class UsuarioControllerTest {
 
     @BeforeEach
     void setUp() {
-        usuarioDto = UsuarioBuilder.builderUsuarioDto();
-        usuarioEntity = UsuarioBuilder.builderUsuarioEntity();
+        usuarioDto = UsuarioBuilder.criarUsuarioDto();
+        usuarioEntity = UsuarioBuilder.criarUsuarioEntity();
     }
 
     @Test

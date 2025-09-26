@@ -41,7 +41,7 @@ public class CategoriaDataProviderTest {
 
     @BeforeEach
     void inicializar() {
-        categoriaDomainTeste = CategoriaBuilder.criarCategoria();
+        categoriaDomainTeste = CategoriaBuilder.criarCategoriaDomain();
         categoriaEntityTeste = CategoriaBuilder.criarCategoriaEntity();
 
         pageable = PageRequest.of(0,10);
@@ -60,7 +60,7 @@ public class CategoriaDataProviderTest {
         Categoria categoriaResultado = dataProvider.salvar(categoriaDomainTeste);
 
         Assertions.assertNotNull(categoriaResultado.getId());
-        CategoriaValidator.validaCategoriaDomain(categoriaDomainTeste, categoriaResultado);
+        CategoriaValidator.validarCategoriaDomain(categoriaDomainTeste, categoriaResultado);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class CategoriaDataProviderTest {
 
         Assertions.assertNotNull(resultado);
         Assertions.assertEquals(categoriaDomainPage.getTotalElements(), resultado.getTotalElements());
-        resultado.forEach(categoria -> CategoriaValidator.validaCategoriaDomain(categoriaDomainTeste, categoria));
+        resultado.forEach(categoria -> CategoriaValidator.validarCategoriaDomain(categoriaDomainTeste, categoria));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class CategoriaDataProviderTest {
         Optional<Categoria> resultado = dataProvider.buscarPorId(id);
 
         Assertions.assertNotNull(resultado.get().getId());
-        CategoriaValidator.validaCategoriaDomain(categoriaDomainTeste, resultado.get());
+        CategoriaValidator.validarCategoriaDomain(categoriaDomainTeste, resultado.get());
     }
 
     @Test

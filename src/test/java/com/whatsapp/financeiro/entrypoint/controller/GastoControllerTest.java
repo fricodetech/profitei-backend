@@ -1,7 +1,7 @@
 package com.whatsapp.financeiro.entrypoint.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.whatsapp.financeiro.builder.GastoBuilder;
+import com.whatsapp.financeiro.builder.OperacaoBuilder;
 import com.whatsapp.financeiro.domain.Operacao;
 import com.whatsapp.financeiro.entrypoint.dto.OperacaoDto;
 import com.whatsapp.financeiro.entrypoint.mapper.OperacaoMapperEntry;
@@ -45,7 +45,7 @@ class GastoControllerTest {
 
     @BeforeEach
     void setUp() {
-        gastoDto = GastoBuilder.criarGastoDto();
+        gastoDto = OperacaoBuilder.criarOperacaoDto();
         gastoDomain = OperacaoMapperEntry.paraDomain(gastoDto);
         gastoEntity = OperacaoMapperInfra.paraEntity(gastoDomain);
         idGasto = gastoDto.getId();
@@ -69,7 +69,7 @@ class GastoControllerTest {
 
     @Test
     void deveConsultarTodosGastos() throws Exception {
-        Page<Operacao> page = GastoBuilder.criarPageDeGastoDomain();
+        Page<Operacao> page = OperacaoBuilder.criarPageDeGastoDomain();
 
         Mockito.when(repository.findAll(Mockito.any(Pageable.class)))
                 .thenReturn(page.map(OperacaoMapperInfra::paraEntity));

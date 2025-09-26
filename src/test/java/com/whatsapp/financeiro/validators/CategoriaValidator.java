@@ -6,21 +6,21 @@ import com.whatsapp.financeiro.infrastructure.repository.entities.CategoriaEntit
 import org.junit.jupiter.api.Assertions;
 
 public class CategoriaValidator {
-    public static void validaCategoriaDto(CategoriaDto esperado, CategoriaDto resultado) {
+    public static void validarCategoriaDto(CategoriaDto esperado, CategoriaDto resultado) {
         Assertions.assertEquals(esperado.getTitulo(), resultado.getTitulo());
         Assertions.assertEquals(esperado.getDescricao(), resultado.getDescricao());
-        ClienteValidator.validaClienteDto(esperado.getCliente(), resultado.getCliente());
+        UsuarioValidator.validarUsuarioDto(esperado.getUsuario(), resultado.getUsuario());
     }
 
-    public static void validaCategoriaDomain(Categoria esperado, Categoria resultado) {
+    public static void validarCategoriaDomain(Categoria esperado, Categoria resultado) {
         Assertions.assertEquals(esperado.getTitulo(), resultado.getTitulo());
         Assertions.assertEquals(esperado.getDescricao(), resultado.getDescricao());
-        ClienteValidator.validaClienteDomain(esperado.getCliente(), resultado.getCliente());
+        UsuarioValidator.validarUsuarioDomain(esperado.getUsuario(), resultado.getUsuario());
     }
 
-    public static void validaCategoriaEntity(CategoriaEntity esperado, CategoriaEntity resultado) {
+    public static void validarCategoriaEntity(CategoriaEntity esperado, CategoriaEntity resultado) {
         Assertions.assertEquals(esperado.getTitulo(), resultado.getTitulo());
         Assertions.assertEquals(esperado.getDescricao(), resultado.getDescricao());
-        ClienteValidator.validaClienteEntity(esperado.getCliente(), resultado.getCliente());
+        UsuarioValidator.validarUsuarioEntity(esperado.getUsuario(), resultado.getUsuario());
     }
 }

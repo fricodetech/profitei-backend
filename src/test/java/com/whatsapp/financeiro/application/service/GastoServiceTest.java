@@ -2,7 +2,7 @@ package com.whatsapp.financeiro.application.service;
 
 import com.whatsapp.financeiro.application.exceptions.OperacaoNaoEncontradaException;
 import com.whatsapp.financeiro.application.gateway.OperacaoGateway;
-import com.whatsapp.financeiro.builder.GastoBuilder;
+import com.whatsapp.financeiro.builder.OperacaoBuilder;
 import com.whatsapp.financeiro.domain.Operacao;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +42,7 @@ public class GastoServiceTest {
 
     @BeforeEach
     void inicializar() {
-        gastoDomainTeste = GastoBuilder.criarGastoDomain();
+        gastoDomainTeste = OperacaoBuilder.criarOperacaoDomain();
 
         id = gastoDomainTeste.getId();
         pageable = PageRequest.of(0, 10);
@@ -67,7 +67,7 @@ public class GastoServiceTest {
 
     @Test
     void deveBuscarTodosOsGastosComSucesso() {
-        Page<Operacao> gastoDomainPage = GastoBuilder.criarPageDeGastoDomain();
+        Page<Operacao> gastoDomainPage = OperacaoBuilder.criarPageDeGastoDomain();
         Mockito.when(gateway.consultarTodos(Mockito.any())).thenReturn(gastoDomainPage);
 
         Page<Operacao> resultado = service.consultarTodasOperacoes(pageable);

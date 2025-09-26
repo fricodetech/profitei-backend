@@ -40,7 +40,7 @@ public class CategoriaServiceTest {
 
     @BeforeEach
     void inicializar() {
-        categoriaDomainTeste = CategoriaBuilder.criarCategoria();
+        categoriaDomainTeste = CategoriaBuilder.criarCategoriaDomain();
 
         id = categoriaDomainTeste.getId();
 
@@ -58,7 +58,7 @@ public class CategoriaServiceTest {
         Categoria categoriaCapturada = captor.getValue();
 
         Assertions.assertEquals(categoriaCapturada.getId(), resultado.getId());
-        CategoriaValidator.validaCategoriaDomain(categoriaCapturada, resultado);
+        CategoriaValidator.validarCategoriaDomain(categoriaCapturada, resultado);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class CategoriaServiceTest {
 
         Page<Categoria> resultado = service.buscarTodasCategorias(pageable);
 
-        resultado.forEach(categoria -> CategoriaValidator.validaCategoriaDomain(categoriaDomainTeste, categoria));
+        resultado.forEach(categoria -> CategoriaValidator.validarCategoriaDomain(categoriaDomainTeste, categoria));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class CategoriaServiceTest {
 
         Categoria resultado = service.buscarCategoriaPorId(id);
 
-        CategoriaValidator.validaCategoriaDomain(categoriaDomainTeste, resultado);
+        CategoriaValidator.validarCategoriaDomain(categoriaDomainTeste, resultado);
     }
 
     @Test
@@ -102,7 +102,7 @@ public class CategoriaServiceTest {
         Categoria categoriaCapturada = captor.getValue();
 
         Assertions.assertEquals("Novo Título", categoriaCapturada.getTitulo());
-        CategoriaValidator.validaCategoriaDomain(categoriaCapturada, resultado);
+        CategoriaValidator.validarCategoriaDomain(categoriaCapturada, resultado);
     }
 
     @Test

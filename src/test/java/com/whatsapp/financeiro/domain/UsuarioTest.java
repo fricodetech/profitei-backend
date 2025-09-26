@@ -7,15 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class UsuarioTest {
 
     private Usuario usuario;
 
     @BeforeEach
     void setUp() {
-        usuario = UsuarioBuilder.builderUsuarioDomain();
+        usuario = UsuarioBuilder.criarUsuarioDomain();
     }
 
     @Test

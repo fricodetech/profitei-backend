@@ -1,6 +1,6 @@
 package com.whatsapp.financeiro.infrastructure.dataprovider;
 
-import com.whatsapp.financeiro.builder.GastoBuilder;
+import com.whatsapp.financeiro.builder.OperacaoBuilder;
 import com.whatsapp.financeiro.domain.Operacao;
 import com.whatsapp.financeiro.infrastructure.exceptions.DataProviderException;
 import com.whatsapp.financeiro.infrastructure.mapper.OperacaoMapperInfra;
@@ -37,8 +37,8 @@ class GastoDataProviderTest {
 
     @BeforeEach
     void inicializar() {
-        gastoDomainTeste = GastoBuilder.criarGastoDomain();
-        gastoEntityTeste = GastoBuilder.criarGastoEntity();
+        gastoDomainTeste = OperacaoBuilder.criarOperacaoDomain();
+        gastoEntityTeste = OperacaoBuilder.criarOperacaoEntity();
 
         pageable = PageRequest.of(0, 10);
         id = gastoDomainTeste.getId();
@@ -68,7 +68,7 @@ class GastoDataProviderTest {
 
     @Test
     void deveBuscarTodosGastosComSucesso() {
-        Page<Operacao> gastoPage = GastoBuilder.criarPageDeGastoDomain();
+        Page<Operacao> gastoPage = OperacaoBuilder.criarPageDeGastoDomain();
 
         Mockito.when(repository.findAll(pageable)).thenReturn(gastoPage.map(OperacaoMapperInfra::paraEntity));
 
