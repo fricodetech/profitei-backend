@@ -28,9 +28,6 @@ public class CategoriaDataProviderTest {
     @Mock
     private CategoriaRepository repository;
 
-    @Mock
-    private CategoriaMapperInfra mapper;
-
     @InjectMocks
     private CategoriaDataProvider dataProvider;
 
@@ -54,19 +51,16 @@ public class CategoriaDataProviderTest {
         categoriaDomainTeste.setId(null);
 
         Mockito.when(repository.save(Mockito.any())).thenReturn(categoriaEntityTeste);
-        Mockito.when(mapper.paraEntity(Mockito.any())).thenReturn(categoriaEntityTeste);
-        Mockito.when(mapper.paraDomain(Mockito.any())).thenReturn(categoriaDomainTeste);
 
         Categoria categoriaResultado = dataProvider.salvar(categoriaDomainTeste);
 
         Assertions.assertNotNull(categoriaResultado.getId());
-        CategoriaValidator.validarCategoriaDomain(categoriaDomainTeste, categoriaResultado);
+        Mockito.verify(repository).save(Mockito.any());
     }
 
     @Test
     void deveLancarExceptionAoSalvar() {
         Mockito.when(repository.save(Mockito.any())).thenThrow(RuntimeException.class);
-        Mockito.when(mapper.paraEntity(Mockito.any())).thenReturn(categoriaEntityTeste);
 
         DataProviderException exception = Assertions.assertThrows(
                 DataProviderException.class,
@@ -78,25 +72,26 @@ public class CategoriaDataProviderTest {
     @Test
     void deveBuscarTodasCategoriasComSucesso() {
         Page<Categoria> categoriaDomainPage = CategoriaBuilder.criarPageDeCategoria();
-        Page<CategoriaEntity> categoriaEntityPage = CategoriaBuilder.criarPageDeCategoriaEntity();
+        Page<CategoriaEntity> categoriaEntityPage = categoriaDomainPage.map(CategoriaMapperInfra::paraEntity);
 
-        Mockito.when(repository.findAll(pageable)).thenReturn(categoriaEntityPage);
-        Mockito.when(mapper.paraDomain(Mockito.any())).thenReturn(categoriaDomainTeste);
+        Mockito.when(repository.findAllByUsuarioId(Mockito.any(), Mockito.any())).thenReturn(categoriaEntityPage);
 
-        Page<Categoria> resultado = dataProvider.buscarTodas(pageable);
+        UUID idUsuario = categoriaEntityPage.getContent().getFirst().getId();
+        Page<Categoria> resultado = dataProvider.consultarTodas(idUsuario, pageable);
 
         Assertions.assertNotNull(resultado);
+        Assertions.assertNotNull(resultado.getContent().getFirst().getId());
         Assertions.assertEquals(categoriaDomainPage.getTotalElements(), resultado.getTotalElements());
-        resultado.forEach(categoria -> CategoriaValidator.validarCategoriaDomain(categoriaDomainTeste, categoria));
+        Mockito.verify(repository).findAllByUsuarioId(Mockito.any(), Mockito.any());
     }
 
     @Test
     void deveLancarExceptionAoBuscarTodasCategorias() {
-        Mockito.when(repository.findAll(pageable)).thenThrow(RuntimeException.class);
+        Mockito.when(repository.findAllByUsuarioId(Mockito.any(),Mockito.any())).thenThrow(RuntimeException.class);
 
         DataProviderException exception = Assertions.assertThrows(
                 DataProviderException.class,
-                () -> dataProvider.buscarTodas(pageable));
+                () -> dataProvider.consultarTodas(UUID.randomUUID(), pageable));
 
         Assertions.assertEquals(CategoriaDataProvider.MENSAGEM_ERRO_BUSCAR_CATEGORIAS, exception.getMessage());
     }
@@ -104,12 +99,13 @@ public class CategoriaDataProviderTest {
     @Test
     void deveBuscarCategoriaPorIdComSucesso() {
         Mockito.when(repository.findById(Mockito.any())).thenReturn(Optional.of(categoriaEntityTeste));
-        Mockito.when(mapper.paraDomain(Mockito.any())).thenReturn(categoriaDomainTeste);
 
-        Optional<Categoria> resultado = dataProvider.buscarPorId(id);
+        Optional<Categoria> resultadoOptional = dataProvider.consultarPorId(id);
+        Categoria resultado = resultadoOptional.get();
 
-        Assertions.assertNotNull(resultado.get().getId());
-        CategoriaValidator.validarCategoriaDomain(categoriaDomainTeste, resultado.get());
+        Assertions.assertNotNull(resultado.getId());
+        Assertions.assertEquals(id, resultado.getId());
+        Mockito.verify(repository).findById(Mockito.any());
     }
 
     @Test
@@ -118,7 +114,7 @@ public class CategoriaDataProviderTest {
 
         DataProviderException exception = Assertions.assertThrows(
                 DataProviderException.class,
-                () -> dataProvider.buscarPorId(id));
+                () -> dataProvider.consultarPorId(id));
 
         Assertions.assertEquals(CategoriaDataProvider.MENSAGEM_ERRO_BUSCAR_CATEGORIA_POR_ID, exception.getMessage());
     }

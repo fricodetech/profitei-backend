@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface CategoriaGateway {
     Categoria salvar(Categoria categoriaCriada);
-    Page<Categoria> consultarTodas(Pageable pageable);
+    Page<Categoria> consultarTodas(UUID idUsuario, Pageable pageable);
     Optional<Categoria> consultarPorId(UUID id);
     void deletar(UUID id);
 }

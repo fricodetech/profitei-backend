@@ -42,6 +42,7 @@ public class CategoriaController {
 
     @GetMapping
     public ResponseEntity<ResponseDto<Page<CategoriaDto>>> consultarTodasCategorias(
+            @RequestParam UUID idUsuario,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "titulo") String sort
@@ -49,7 +50,7 @@ public class CategoriaController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
 
-        Page<CategoriaDto> categoriaPage = service.consultarTodasCategorias(pageable).map(CategoriaMapperEntry::paraDto);
+        Page<CategoriaDto> categoriaPage = service.consultarTodasCategorias(idUsuario, pageable).map(CategoriaMapperEntry::paraDto);
 
         ResponseDto<Page<CategoriaDto>> response = new ResponseDto<>(categoriaPage);
         return ResponseEntity.ok(response);

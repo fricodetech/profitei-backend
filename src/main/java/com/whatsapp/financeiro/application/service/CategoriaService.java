@@ -36,10 +36,12 @@ public class CategoriaService {
         return categoriaSalva;
     }
 
-    public Page<Categoria> consultarTodasCategorias(Pageable pageable) {
+    public Page<Categoria> consultarTodasCategorias(UUID idUsuario, Pageable pageable) {
         log.info("Buscando todas as categorias salvas.");
 
-        Page<Categoria> categoriaPage = gateway.consultarTodas(pageable);
+        usuarioService.consultarPorId(idUsuario);
+
+        Page<Categoria> categoriaPage = gateway.consultarTodas(idUsuario, pageable);
 
         log.info("Categorias buscadas com sucesso! Categorias: {}", categoriaPage.getTotalElements());
         return categoriaPage;
