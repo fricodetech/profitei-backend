@@ -65,7 +65,7 @@ public class CategoriaService {
 
         Categoria categoriaBuscada = this.consultarCategoriaPorId(id);
 
-        categoriaBuscada.alterarAtributos(categoriaNova);
+        categoriaBuscada.alterarDados(categoriaNova);
 
         Categoria categoriaSalva = gateway.salvar(categoriaBuscada);
 

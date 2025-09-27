@@ -15,7 +15,7 @@ public class Categoria {
     private String descricao;
     private Usuario usuario;
 
-    public void alterarAtributos(Categoria novo) {
+    public void alterarDados(Categoria novo) {
         this.setDescricao(novo.getDescricao());
         this.setTitulo(novo.getTitulo());
     }

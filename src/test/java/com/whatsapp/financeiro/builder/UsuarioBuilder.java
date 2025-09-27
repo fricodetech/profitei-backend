@@ -4,6 +4,7 @@ import com.whatsapp.financeiro.domain.Usuario;
 import com.whatsapp.financeiro.entrypoint.dto.UsuarioDto;
 import com.whatsapp.financeiro.infrastructure.repository.entities.UsuarioEntity;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public class UsuarioBuilder {
@@ -15,6 +16,8 @@ public class UsuarioBuilder {
                 .email("emailteste@gmail.com")
                 .telefone("559988774444")
                 .senha("senhateste321#")
+                .dataCriacao(LocalDate.of(2012, 12, 12))
+                .plano(PlanoBuilder.criarPlanoDto())
                 .build();
     }
 
@@ -25,6 +28,8 @@ public class UsuarioBuilder {
                 .email("emailteste@gmail.com")
                 .telefone("559988774444")
                 .senha("senhateste321#")
+                .dataCriacao(LocalDate.of(2012, 12, 12))
+                .plano(PlanoBuilder.criarPlanoDomain())
                 .build();
     }
 
@@ -35,6 +40,8 @@ public class UsuarioBuilder {
                 .email("emailteste@gmail.com")
                 .telefone("559988774444")
                 .senha("senhateste321#")
+                .dataCriacao(LocalDate.of(2012, 12, 12))
+                .plano(PlanoBuilder.criarPlanoEntity())
                 .build();
     }
 }

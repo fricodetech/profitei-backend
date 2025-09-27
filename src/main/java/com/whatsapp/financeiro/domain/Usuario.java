@@ -23,5 +23,6 @@ public class Usuario {
         this.nome = novosDados.getNome();
         this.email = novosDados.getEmail();
         this.telefone = novosDados.getTelefone();
+        this.plano = novosDados.getPlano();
     }
 }

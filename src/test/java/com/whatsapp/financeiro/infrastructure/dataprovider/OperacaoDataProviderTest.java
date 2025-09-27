@@ -51,12 +51,12 @@ class OperacaoDataProviderTest {
     void deveSalvarOperacaoComSucesso() {
         operacaoDomainTeste.setId(null);
 
-        Mockito.when(repository.save(Mockito.any())).thenReturn(operacaoEntityTeste);
+        Mockito.when(repository.save(Mockito.any(OperacaoEntity.class))).thenReturn(operacaoEntityTeste);
 
         Operacao resultado = dataProvider.salvar(operacaoDomainTeste);
 
         Assertions.assertNotNull(resultado.getId());
-        Mockito.verify(repository).save(Mockito.any());
+        Mockito.verify(repository).save(Mockito.any(OperacaoEntity.class));
     }
 
     @Test
@@ -74,13 +74,13 @@ class OperacaoDataProviderTest {
     void deveBuscarTodasOperacoesComSucesso() {
         Page<Operacao> operacaoPage = OperacaoBuilder.criarPageDeOperacaoDomain();
 
-        Mockito.when(repository.findAllByUsuarioId(Mockito.any(), Mockito.any())).thenReturn(operacaoPage.map(OperacaoMapperInfra::paraEntity));
+        Mockito.when(repository.findAllByUsuarioId(Mockito.any(UUID.class), Mockito.any(Pageable.class))).thenReturn(operacaoPage.map(OperacaoMapperInfra::paraEntity));
 
         Page<Operacao> resultado = dataProvider.consultarTodos(idUsuario, pageable);
 
         Assertions.assertNotNull(resultado);
         Assertions.assertEquals(operacaoPage.getTotalElements(), resultado.getTotalElements());
-        Mockito.verify(repository).findAllByUsuarioId(Mockito.any(), Mockito.any());
+        Mockito.verify(repository).findAllByUsuarioId(Mockito.any(UUID.class), Mockito.any(Pageable.class));
     }
 
     @Test
@@ -98,26 +98,27 @@ class OperacaoDataProviderTest {
     void deveBuscarTodosGanhosComSucesso() {
         Page<Operacao> operacaoPage = OperacaoBuilder.criarPageDeGanhoDomain();
 
-        Mockito.when(repository.findAllByTipoOperacaoAndUsuarioId(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(operacaoPage.map(OperacaoMapperInfra::paraEntity));
+        Mockito.when(repository.findAllByTipoOperacaoAndUsuarioId(Mockito.any(TipoOperacao.class), Mockito.any(UUID.class), Mockito.any(Pageable.class)))
+                .thenReturn(operacaoPage.map(OperacaoMapperInfra::paraEntity));
 
         Page<Operacao> resultado = dataProvider.consultarTodosPorTipoOperacao(TipoOperacao.GANHO, idUsuario, pageable);
 
         Assertions.assertNotNull(resultado);
         Assertions.assertEquals(operacaoPage.getTotalElements(), resultado.getTotalElements());
-        Mockito.verify(repository).findAllByTipoOperacaoAndUsuarioId(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(repository).findAllByTipoOperacaoAndUsuarioId(Mockito.any(TipoOperacao.class), Mockito.any(UUID.class), Mockito.any(Pageable.class));
     }
 
     @Test
     void deveBuscarTodosGastosComSucesso() {
         Page<Operacao> operacaoPage = OperacaoBuilder.criarPageDeGastoDomain();
 
-        Mockito.when(repository.findAllByTipoOperacaoAndUsuarioId(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(operacaoPage.map(OperacaoMapperInfra::paraEntity));
+        Mockito.when(repository.findAllByTipoOperacaoAndUsuarioId(Mockito.any(TipoOperacao.class), Mockito.any(UUID.class), Mockito.any(Pageable.class))).thenReturn(operacaoPage.map(OperacaoMapperInfra::paraEntity));
 
         Page<Operacao> resultado = dataProvider.consultarTodosPorTipoOperacao(TipoOperacao.GASTO, idUsuario, pageable);
 
         Assertions.assertNotNull(resultado);
         Assertions.assertEquals(operacaoPage.getTotalElements(), resultado.getTotalElements());
-        Mockito.verify(repository).findAllByTipoOperacaoAndUsuarioId(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(repository).findAllByTipoOperacaoAndUsuarioId(Mockito.any(TipoOperacao.class), Mockito.any(UUID.class), Mockito.any(Pageable.class));
     }
 
     @Test
@@ -133,13 +134,12 @@ class OperacaoDataProviderTest {
 
     @Test
     void deveBuscarOperacaoPorIdComSucesso() {
-        Mockito.when(repository.findById(Mockito.any())).thenReturn(Optional.of(operacaoEntityTeste));
+        Mockito.when(repository.findById(Mockito.any(UUID.class))).thenReturn(Optional.of(operacaoEntityTeste));
 
-        Optional<Operacao> resultadoOptional = dataProvider.consultarPorId(id);
-        Operacao resultado = resultadoOptional.get();
+        Optional<Operacao> resultado = dataProvider.consultarPorId(id);
 
-        Assertions.assertNotNull(resultado);
-        Assertions.assertEquals(id, resultado.getId());
+        Assertions.assertTrue(resultado.isPresent());
+        Assertions.assertEquals(id, resultado.get().getId());
         Mockito.verify(repository).findById(Mockito.any());
     }
 
@@ -156,7 +156,7 @@ class OperacaoDataProviderTest {
 
     @Test
     void deveDeletarOperacaoComSucesso() {
-        Mockito.doNothing().when(repository).deleteById(id);
+        Mockito.doNothing().when(repository).deleteById(Mockito.any(UUID.class));
 
         dataProvider.deletar(id);
 

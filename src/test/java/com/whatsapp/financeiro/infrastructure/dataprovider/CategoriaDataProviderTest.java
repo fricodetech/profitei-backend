@@ -50,17 +50,17 @@ public class CategoriaDataProviderTest {
     void deveSalvarCategoriaComSucesso() {
         categoriaDomainTeste.setId(null);
 
-        Mockito.when(repository.save(Mockito.any())).thenReturn(categoriaEntityTeste);
+        Mockito.when(repository.save(Mockito.any(CategoriaEntity.class))).thenReturn(categoriaEntityTeste);
 
         Categoria categoriaResultado = dataProvider.salvar(categoriaDomainTeste);
 
         Assertions.assertNotNull(categoriaResultado.getId());
-        Mockito.verify(repository).save(Mockito.any());
+        Mockito.verify(repository).save(Mockito.any(CategoriaEntity.class));
     }
 
     @Test
     void deveLancarExceptionAoSalvar() {
-        Mockito.when(repository.save(Mockito.any())).thenThrow(RuntimeException.class);
+        Mockito.when(repository.save(Mockito.any(CategoriaEntity.class))).thenThrow(RuntimeException.class);
 
         DataProviderException exception = Assertions.assertThrows(
                 DataProviderException.class,
@@ -74,7 +74,7 @@ public class CategoriaDataProviderTest {
         Page<Categoria> categoriaDomainPage = CategoriaBuilder.criarPageDeCategoria();
         Page<CategoriaEntity> categoriaEntityPage = categoriaDomainPage.map(CategoriaMapperInfra::paraEntity);
 
-        Mockito.when(repository.findAllByUsuarioId(Mockito.any(), Mockito.any())).thenReturn(categoriaEntityPage);
+        Mockito.when(repository.findAllByUsuarioId(Mockito.any(UUID.class), Mockito.any(Pageable.class))).thenReturn(categoriaEntityPage);
 
         UUID idUsuario = categoriaEntityPage.getContent().getFirst().getId();
         Page<Categoria> resultado = dataProvider.consultarTodas(idUsuario, pageable);
@@ -82,7 +82,7 @@ public class CategoriaDataProviderTest {
         Assertions.assertNotNull(resultado);
         Assertions.assertNotNull(resultado.getContent().getFirst().getId());
         Assertions.assertEquals(categoriaDomainPage.getTotalElements(), resultado.getTotalElements());
-        Mockito.verify(repository).findAllByUsuarioId(Mockito.any(), Mockito.any());
+        Mockito.verify(repository).findAllByUsuarioId(Mockito.any(UUID.class), Mockito.any(Pageable.class));
     }
 
     @Test
@@ -98,14 +98,13 @@ public class CategoriaDataProviderTest {
 
     @Test
     void deveBuscarCategoriaPorIdComSucesso() {
-        Mockito.when(repository.findById(Mockito.any())).thenReturn(Optional.of(categoriaEntityTeste));
+        Mockito.when(repository.findById(Mockito.any(UUID.class))).thenReturn(Optional.of(categoriaEntityTeste));
 
-        Optional<Categoria> resultadoOptional = dataProvider.consultarPorId(id);
-        Categoria resultado = resultadoOptional.get();
+        Optional<Categoria> resultado = dataProvider.consultarPorId(id);
 
-        Assertions.assertNotNull(resultado.getId());
-        Assertions.assertEquals(id, resultado.getId());
-        Mockito.verify(repository).findById(Mockito.any());
+        Assertions.assertTrue(resultado.isPresent());
+        Assertions.assertEquals(id, resultado.get().getId());
+        Mockito.verify(repository).findById(Mockito.any(UUID.class));
     }
 
     @Test
@@ -121,7 +120,7 @@ public class CategoriaDataProviderTest {
 
     @Test
     void deveDeletarCategoriaComSucesso() {
-        Mockito.doNothing().when(repository).deleteById(id);
+        Mockito.doNothing().when(repository).deleteById(Mockito.any(UUID.class));
 
         dataProvider.deletar(id);
 
