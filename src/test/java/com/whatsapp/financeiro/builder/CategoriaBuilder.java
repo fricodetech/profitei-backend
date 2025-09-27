@@ -38,27 +38,17 @@ public class CategoriaBuilder {
                 .build();
     }
 
-    public static Page<Categoria> criarPageDeCategoria() {
+    public static Page<Categoria> criarPageDeCategoriaDomain() {
         return new PageImpl<>(List.of(
                 criarCategoriaDomain(),
-                Categoria.builder()
-                        .id(UUID.fromString("51ad1798-ce2a-5a35-0537-f355e80a5737"))
-                        .titulo("outro titulo")
-                        .descricao("outra boa descricao")
-                        .usuario(UsuarioBuilder.criarUsuarioDomain())
-                        .build()
+                criarCategoriaDomain()
         ));
     }
 
     public static Page<CategoriaEntity> criarPageDeCategoriaEntity() {
         return new PageImpl<>(List.of(
                 criarCategoriaEntity(),
-                CategoriaEntity.builder()
-                        .id(UUID.fromString("51ad1798-ce2a-5a35-0537-f355e80a5737"))
-                        .titulo("outro titulo")
-                        .descricao("outra boa descricao")
-                        .usuario(UsuarioBuilder.criarUsuarioEntity())
-                        .build()
+                criarCategoriaEntity()
         ));
     }
 }

@@ -82,10 +82,8 @@ public class OperacaoService {
         Operacao operacaoConsultada = consultarOperacaoPorId(id);
         UUID idCategoria = operacaoNova.getCategoria().getId();
 
-        if (idCategoria != null) {
-            Categoria categoriaNova = categoriaService.consultarCategoriaPorId(idCategoria);
-            operacaoNova.setCategoria(categoriaNova);
-        }
+        Categoria categoriaNova = categoriaService.consultarCategoriaPorId(idCategoria);
+        operacaoNova.setCategoria(categoriaNova);
 
         operacaoConsultada.alterarDados(operacaoNova);
 

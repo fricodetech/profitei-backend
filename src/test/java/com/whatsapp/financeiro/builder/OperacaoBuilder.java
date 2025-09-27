@@ -53,45 +53,21 @@ public class OperacaoBuilder {
     public static Page<Operacao> criarPageDeOperacaoDomain() {
         return new PageImpl<>(List.of(
                 criarOperacaoDomain(TipoOperacao.GASTO),
-                Operacao.builder()
-                        .id(UUID.fromString("51ad1798-ce2a-5a35-0537-f355e80a5737"))
-                        .descricao("descricao teste")
-                        .tipoOperacao(TipoOperacao.GANHO)
-                        .valor(BigDecimal.valueOf(10))
-                        .dataOperacao(LocalDate.of(2012, 12, 12))
-                        .categoria(CategoriaBuilder.criarCategoriaDomain())
-                        .usuario(UsuarioBuilder.criarUsuarioDomain())
-                        .build()
+                criarOperacaoDomain(TipoOperacao.GANHO)
         ));
     }
 
     public static Page<Operacao> criarPageDeGastoDomain() {
         return new PageImpl<>(List.of(
                 criarOperacaoDomain(TipoOperacao.GASTO),
-                Operacao.builder()
-                        .id(UUID.fromString("51ad1798-ce2a-5a35-0537-f355e80a5737"))
-                        .descricao("descricao teste")
-                        .tipoOperacao(TipoOperacao.GASTO)
-                        .valor(BigDecimal.valueOf(10))
-                        .dataOperacao(LocalDate.of(2012, 12, 12))
-                        .categoria(CategoriaBuilder.criarCategoriaDomain())
-                        .usuario(UsuarioBuilder.criarUsuarioDomain())
-                        .build()
+                criarOperacaoDomain(TipoOperacao.GASTO)
         ));
     }
 
     public static Page<Operacao> criarPageDeGanhoDomain() {
         return new PageImpl<>(List.of(
                 criarOperacaoDomain(TipoOperacao.GANHO),
-                Operacao.builder()
-                        .id(UUID.fromString("51ad1798-ce2a-5a35-0537-f355e80a5737"))
-                        .descricao("descricao teste")
-                        .tipoOperacao(TipoOperacao.GANHO)
-                        .valor(BigDecimal.valueOf(10))
-                        .dataOperacao(LocalDate.of(2012, 12, 12))
-                        .categoria(CategoriaBuilder.criarCategoriaDomain())
-                        .usuario(UsuarioBuilder.criarUsuarioDomain())
-                        .build()
+                criarOperacaoDomain(TipoOperacao.GANHO)
         ));
     }
 }

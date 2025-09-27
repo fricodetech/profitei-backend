@@ -6,7 +6,6 @@ import com.whatsapp.financeiro.infrastructure.exceptions.DataProviderException;
 import com.whatsapp.financeiro.infrastructure.mapper.CategoriaMapperInfra;
 import com.whatsapp.financeiro.infrastructure.repository.CategoriaRepository;
 import com.whatsapp.financeiro.infrastructure.repository.entities.CategoriaEntity;
-import com.whatsapp.financeiro.validators.CategoriaValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,7 +70,7 @@ public class CategoriaDataProviderTest {
 
     @Test
     void deveBuscarTodasCategoriasComSucesso() {
-        Page<Categoria> categoriaDomainPage = CategoriaBuilder.criarPageDeCategoria();
+        Page<Categoria> categoriaDomainPage = CategoriaBuilder.criarPageDeCategoriaDomain();
         Page<CategoriaEntity> categoriaEntityPage = categoriaDomainPage.map(CategoriaMapperInfra::paraEntity);
 
         Mockito.when(repository.findAllByUsuarioId(Mockito.any(UUID.class), Mockito.any(Pageable.class))).thenReturn(categoriaEntityPage);

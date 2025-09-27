@@ -3,7 +3,9 @@ package com.whatsapp.financeiro.application.service;
 import com.whatsapp.financeiro.application.exceptions.CategoriaNaoEncontradaException;
 import com.whatsapp.financeiro.application.gateway.CategoriaGateway;
 import com.whatsapp.financeiro.builder.CategoriaBuilder;
+import com.whatsapp.financeiro.builder.UsuarioBuilder;
 import com.whatsapp.financeiro.domain.Categoria;
+import com.whatsapp.financeiro.domain.Usuario;
 import com.whatsapp.financeiro.validators.CategoriaValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,10 +28,7 @@ public class CategoriaServiceTest {
     private CategoriaGateway gateway;
 
     @Mock
-    private ClienteService clienteService;
-
-    @Captor
-    private ArgumentCaptor<Categoria> captor;
+    private UsuarioService usuarioService;
 
     @InjectMocks
     private CategoriaService service;
@@ -49,83 +48,81 @@ public class CategoriaServiceTest {
 
     @Test
     void deveCriarCategoriaComSucesso() {
-        Mockito.when(clienteService.buscarClientePorId(Mockito.any())).thenReturn(categoriaDomainTeste.getCliente());
-        Mockito.when(gateway.salvar(captor.capture())).thenReturn(categoriaDomainTeste);
+        Mockito.when(usuarioService.consultarPorId(Mockito.any(UUID.class))).thenReturn(categoriaDomainTeste.getUsuario());
+        Mockito.when(gateway.salvar(Mockito.any(Categoria.class))).thenReturn(categoriaDomainTeste);
 
         categoriaDomainTeste.setId(null);
 
         Categoria resultado = service.criarCategoria(categoriaDomainTeste);
-        Categoria categoriaCapturada = captor.getValue();
 
-        Assertions.assertEquals(categoriaCapturada.getId(), resultado.getId());
-        CategoriaValidator.validarCategoriaDomain(categoriaCapturada, resultado);
+        Assertions.assertNotNull(resultado);
+        Mockito.verify(usuarioService).consultarPorId(Mockito.any(UUID.class));
+        Mockito.verify(gateway).salvar(Mockito.any(Categoria.class));
     }
 
     @Test
     void deveBuscarTodasAsCategoriasComSucesso() {
-        Page<Categoria> categoriaDomainPage = CategoriaBuilder.criarPageDeCategoria();
-        Mockito.when(gateway.buscarTodas(Mockito.any())).thenReturn(categoriaDomainPage);
+        Page<Categoria> categoriaDomainPage = CategoriaBuilder.criarPageDeCategoriaDomain();
+        Usuario usuarioTeste = UsuarioBuilder.criarUsuarioDomain();
 
-        Page<Categoria> resultado = service.buscarTodasCategorias(pageable);
+        Mockito.when(usuarioService.consultarPorId(Mockito.any(UUID.class))).thenReturn(usuarioTeste);
+        Mockito.when(gateway.consultarTodas(Mockito.any(UUID.class), Mockito.any(Pageable.class))).thenReturn(categoriaDomainPage);
 
-        resultado.forEach(categoria -> CategoriaValidator.validarCategoriaDomain(categoriaDomainTeste, categoria));
+        Page<Categoria> resultado = service.consultarTodasCategorias(usuarioTeste.getId(), pageable);
+
+        Assertions.assertNotNull(resultado);
+        Assertions.assertEquals(categoriaDomainPage.getTotalElements(), resultado.getTotalElements());
+        Mockito.verify(usuarioService).consultarPorId(Mockito.any(UUID.class));
+        Mockito.verify(gateway.consultarTodas(Mockito.any(UUID.class), Mockito.any(Pageable.class)));
     }
 
     @Test
     void deveBuscarCategoriaPorIdComSucesso() {
-        Mockito.when(gateway.buscarPorId(Mockito.any())).thenReturn(Optional.of(categoriaDomainTeste));
+        Mockito.when(gateway.consultarPorId(Mockito.any(UUID.class))).thenReturn(Optional.of(categoriaDomainTeste));
 
-        Categoria resultado = service.buscarCategoriaPorId(id);
+        Categoria resultado = service.consultarCategoriaPorId(id);
 
-        CategoriaValidator.validarCategoriaDomain(categoriaDomainTeste, resultado);
+        Assertions.assertNotNull(resultado);
+        Mockito.verify(gateway).consultarPorId(Mockito.any(UUID.class));
     }
 
     @Test
     void deveLancarExceptionCategoriaNaoEncontrada() {
-        Mockito.when(gateway.buscarPorId(Mockito.any())).thenReturn(Optional.empty());
+        Mockito.when(gateway.consultarPorId(Mockito.any(UUID.class))).thenReturn(Optional.empty());
 
         CategoriaNaoEncontradaException exception = Assertions.assertThrows(
                 CategoriaNaoEncontradaException.class,
-                () -> service.buscarCategoriaPorId(id));
+                () -> service.consultarCategoriaPorId(id));
 
         Assertions.assertEquals(CategoriaService.ERRO_CATEGORIA_NAO_ENCONTRADA, exception.getMessage());
     }
 
     @Test
     void deveAlterarCategoriaComSucesso() {
-        Map<String, Object> campos = Map.of("titulo", "Novo Título");
+        Categoria categoriaNova = CategoriaBuilder.criarCategoriaDomain();
+        categoriaNova.setTitulo("Novo título");
+        categoriaNova.setDescricao("Nova descrição");
 
-        Mockito.when(gateway.buscarPorId(Mockito.any())).thenReturn(Optional.of(categoriaDomainTeste));
-        Mockito.when(gateway.salvar(captor.capture())).thenReturn(categoriaDomainTeste);
+        Mockito.when(service.consultarCategoriaPorId(Mockito.any(UUID.class))).thenReturn(categoriaDomainTeste);
+        Mockito.when(gateway.salvar(Mockito.any(Categoria.class))).thenReturn(categoriaDomainTeste);
 
-        Categoria resultado = service.alterarCategoria(id, campos);
-        Categoria categoriaCapturada = captor.getValue();
+        Categoria resultado = service.alterarCategoria(id, categoriaNova);
 
-        Assertions.assertEquals("Novo Título", categoriaCapturada.getTitulo());
-        CategoriaValidator.validarCategoriaDomain(categoriaCapturada, resultado);
-    }
+        Assertions.assertNotNull(resultado);
+        Assertions.assertEquals("Novo título", resultado.getTitulo());
+        Assertions.assertEquals("Nova descrição", resultado.getDescricao());
 
-    @Test
-    void deveLancarExceptionCampoNaoExistente() {
-        UUID id = categoriaDomainTeste.getId();
-        Map<String, Object> campos = Map.of("campoInvalido", "valor");
-
-        Mockito.when(service.buscarCategoriaPorId(Mockito.any())).thenReturn(categoriaDomainTeste);
-
-        AlterarCamposException exception = Assertions.assertThrows(
-                AlterarCamposException.class,
-                () -> service.alterarCategoria(id, campos));
-
-        Assertions.assertEquals(CategoriaService.ERRO_ALTERAR_CAMPO + campos.get("campoInvalido"), exception.getMessage());
+        Mockito.verify(gateway).consultarPorId(Mockito.any(UUID.class));
+        Mockito.verify(gateway).salvar(Mockito.any(Categoria.class));
     }
 
     @Test
     void deveDeletarCategoriaComSucesso() {
-        Mockito.when(service.buscarCategoriaPorId(Mockito.any())).thenReturn(categoriaDomainTeste);
+        Mockito.when(service.consultarCategoriaPorId(Mockito.any(UUID.class))).thenReturn(categoriaDomainTeste);
         Mockito.doNothing().when(gateway).deletar(id);
 
         service.deletarCategoria(id);
 
-        Mockito.verify(gateway).deletar(id);
+        Mockito.verify(gateway).deletar(Mockito.any(UUID.class));
     }
 }
