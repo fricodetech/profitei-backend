@@ -2,9 +2,7 @@ package com.whatsapp.financeiro.application.service;
 
 import com.whatsapp.financeiro.application.exceptions.OperacaoNaoEncontradaException;
 import com.whatsapp.financeiro.application.gateway.OperacaoGateway;
-import com.whatsapp.financeiro.builder.CategoriaBuilder;
 import com.whatsapp.financeiro.builder.OperacaoBuilder;
-import com.whatsapp.financeiro.builder.UsuarioBuilder;
 import com.whatsapp.financeiro.domain.Categoria;
 import com.whatsapp.financeiro.domain.Operacao;
 import com.whatsapp.financeiro.domain.TipoOperacao;
@@ -19,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 

@@ -25,6 +25,9 @@ public class UsuarioServiceTest {
     @Mock
     private UsuarioGateway gateway;
 
+    @Mock
+    private PlanoService planoService;
+
     @InjectMocks
     private UsuarioService service;
 
@@ -40,10 +43,10 @@ public class UsuarioServiceTest {
     @Test
     void deveCadastrarUsuarioComSucesso() {
         when(gateway.consultarPorTelefone(anyString())).thenReturn(Optional.empty());
+        when(planoService.consultarPlanoPorId(any(UUID.class))).thenReturn(usuarioDomainTeste.getPlano());
         when(gateway.salvar(any(Usuario.class))).thenReturn(usuarioDomainTeste);
 
         Usuario resultado = service.cadastrar(usuarioDomainTeste);
-
 
         assertNotNull(resultado);
         assertEquals(usuarioDomainTeste.getId(), resultado.getId());
@@ -89,6 +92,7 @@ public class UsuarioServiceTest {
         novosDados.setEmail("novoemail@gmail.com");
 
         when(service.consultarPorId(any(UUID.class))).thenReturn(usuarioDomainTeste);
+        when(planoService.consultarPlanoPorId(any(UUID.class))).thenReturn(usuarioDomainTeste.getPlano());
         when(gateway.salvar(any(Usuario.class))).thenReturn(usuarioDomainTeste);
 
         Usuario resultado = service.alterar(id, novosDados);
