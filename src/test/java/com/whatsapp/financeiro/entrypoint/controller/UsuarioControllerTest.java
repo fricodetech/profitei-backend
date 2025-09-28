@@ -3,7 +3,9 @@ package com.whatsapp.financeiro.entrypoint.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whatsapp.financeiro.builder.UsuarioBuilder;
 import com.whatsapp.financeiro.entrypoint.dto.UsuarioDto;
+import com.whatsapp.financeiro.infrastructure.repository.PlanoRepository;
 import com.whatsapp.financeiro.infrastructure.repository.UsuarioRepository;
+import com.whatsapp.financeiro.infrastructure.repository.entities.PlanoEntity;
 import com.whatsapp.financeiro.infrastructure.repository.entities.UsuarioEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,20 +37,24 @@ class UsuarioControllerTest {
     @MockitoBean
     private UsuarioRepository usuarioRepository;
 
-    @Captor
-    ArgumentCaptor<UsuarioEntity> captor;
+    @MockitoBean
+    private PlanoRepository planoRepository;
 
     private UsuarioDto usuarioDto;
     private UsuarioEntity usuarioEntity;
+    private PlanoEntity planoEntity;
 
     @BeforeEach
     void setUp() {
-        usuarioDto = UsuarioBuilder.builderUsuarioDto();
-        usuarioEntity = UsuarioBuilder.builderUsuarioEntity();
+        usuarioDto = UsuarioBuilder.criarUsuarioDto();
+        usuarioEntity = UsuarioBuilder.criarUsuarioEntity();
+
+        planoEntity = usuarioEntity.getPlano();
     }
 
     @Test
     void deveCadastrarComSucesso() throws Exception {
+        Mockito.when(planoRepository.findById(Mockito.any())).thenReturn(Optional.of(planoEntity));
         Mockito.when(usuarioRepository.findByTelefone(Mockito.anyString())).thenReturn(Optional.empty());
         Mockito.when(usuarioRepository.save(Mockito.any())).thenReturn(usuarioEntity);
 
@@ -76,8 +82,9 @@ class UsuarioControllerTest {
 
     @Test
     void deveAlterarComSucesso() throws Exception {
+        Mockito.when(planoRepository.findById(Mockito.any())).thenReturn(Optional.of(planoEntity));
         Mockito.when(usuarioRepository.findById(Mockito.any())).thenReturn(Optional.of(usuarioEntity));
-        Mockito.when(usuarioRepository.save(captor.capture())).thenReturn(usuarioEntity);
+        Mockito.when(usuarioRepository.save(Mockito.any())).thenReturn(usuarioEntity);
 
         mockMvc.perform(put("/usuarios/" + usuarioDto.getId())
                 .contentType(MediaType.APPLICATION_JSON)

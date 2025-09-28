@@ -22,7 +22,7 @@ public class CategoriaEntity {
     private String titulo;
     private String descricao;
 
-    @ManyToOne()
-    @JoinColumn(name = "id_cliente")
-    private ClienteEntity cliente;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private UsuarioEntity usuario;
 }

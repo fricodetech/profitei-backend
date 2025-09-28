@@ -10,7 +10,7 @@ public class CategoriaMapperEntry {
                 .id(domain.getId())
                 .titulo(domain.getTitulo())
                 .descricao(domain.getDescricao())
-                .cliente(ClienteMapperEntry.paraDto(domain.getCliente()))
+                .usuario(UsuarioMapperEntry.paraDto(domain.getUsuario()))
                 .build();
     }
 
@@ -19,7 +19,7 @@ public class CategoriaMapperEntry {
                 .id(dto.getId())
                 .titulo(dto.getTitulo())
                 .descricao(dto.getDescricao())
-                .cliente(ClienteMapperEntry.paraDomain(dto.getCliente()))
+                .usuario(UsuarioMapperEntry.paraDomain(dto.getUsuario()))
                 .build();
     }
 }

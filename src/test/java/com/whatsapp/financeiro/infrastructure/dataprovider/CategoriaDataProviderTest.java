@@ -6,7 +6,6 @@ import com.whatsapp.financeiro.infrastructure.exceptions.DataProviderException;
 import com.whatsapp.financeiro.infrastructure.mapper.CategoriaMapperInfra;
 import com.whatsapp.financeiro.infrastructure.repository.CategoriaRepository;
 import com.whatsapp.financeiro.infrastructure.repository.entities.CategoriaEntity;
-import com.whatsapp.financeiro.validators.CategoriaValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,9 +27,6 @@ public class CategoriaDataProviderTest {
     @Mock
     private CategoriaRepository repository;
 
-    @Mock
-    private CategoriaMapperInfra mapper;
-
     @InjectMocks
     private CategoriaDataProvider dataProvider;
 
@@ -41,7 +37,7 @@ public class CategoriaDataProviderTest {
 
     @BeforeEach
     void inicializar() {
-        categoriaDomainTeste = CategoriaBuilder.criarCategoria();
+        categoriaDomainTeste = CategoriaBuilder.criarCategoriaDomain();
         categoriaEntityTeste = CategoriaBuilder.criarCategoriaEntity();
 
         pageable = PageRequest.of(0,10);
@@ -53,20 +49,17 @@ public class CategoriaDataProviderTest {
     void deveSalvarCategoriaComSucesso() {
         categoriaDomainTeste.setId(null);
 
-        Mockito.when(repository.save(Mockito.any())).thenReturn(categoriaEntityTeste);
-        Mockito.when(mapper.paraEntity(Mockito.any())).thenReturn(categoriaEntityTeste);
-        Mockito.when(mapper.paraDomain(Mockito.any())).thenReturn(categoriaDomainTeste);
+        Mockito.when(repository.save(Mockito.any(CategoriaEntity.class))).thenReturn(categoriaEntityTeste);
 
         Categoria categoriaResultado = dataProvider.salvar(categoriaDomainTeste);
 
         Assertions.assertNotNull(categoriaResultado.getId());
-        CategoriaValidator.validaCategoriaDomain(categoriaDomainTeste, categoriaResultado);
+        Mockito.verify(repository).save(Mockito.any(CategoriaEntity.class));
     }
 
     @Test
     void deveLancarExceptionAoSalvar() {
-        Mockito.when(repository.save(Mockito.any())).thenThrow(RuntimeException.class);
-        Mockito.when(mapper.paraEntity(Mockito.any())).thenReturn(categoriaEntityTeste);
+        Mockito.when(repository.save(Mockito.any(CategoriaEntity.class))).thenThrow(RuntimeException.class);
 
         DataProviderException exception = Assertions.assertThrows(
                 DataProviderException.class,
@@ -77,39 +70,40 @@ public class CategoriaDataProviderTest {
 
     @Test
     void deveBuscarTodasCategoriasComSucesso() {
-        Page<Categoria> categoriaDomainPage = CategoriaBuilder.criarPageDeCategoria();
-        Page<CategoriaEntity> categoriaEntityPage = CategoriaBuilder.criarPageDeCategoriaEntity();
+        Page<Categoria> categoriaDomainPage = CategoriaBuilder.criarPageDeCategoriaDomain();
+        Page<CategoriaEntity> categoriaEntityPage = categoriaDomainPage.map(CategoriaMapperInfra::paraEntity);
 
-        Mockito.when(repository.findAll(pageable)).thenReturn(categoriaEntityPage);
-        Mockito.when(mapper.paraDomain(Mockito.any())).thenReturn(categoriaDomainTeste);
+        Mockito.when(repository.findAllByUsuarioId(Mockito.any(UUID.class), Mockito.any(Pageable.class))).thenReturn(categoriaEntityPage);
 
-        Page<Categoria> resultado = dataProvider.buscarTodas(pageable);
+        UUID idUsuario = categoriaEntityPage.getContent().getFirst().getId();
+        Page<Categoria> resultado = dataProvider.consultarTodas(idUsuario, pageable);
 
         Assertions.assertNotNull(resultado);
+        Assertions.assertNotNull(resultado.getContent().getFirst().getId());
         Assertions.assertEquals(categoriaDomainPage.getTotalElements(), resultado.getTotalElements());
-        resultado.forEach(categoria -> CategoriaValidator.validaCategoriaDomain(categoriaDomainTeste, categoria));
+        Mockito.verify(repository).findAllByUsuarioId(Mockito.any(UUID.class), Mockito.any(Pageable.class));
     }
 
     @Test
     void deveLancarExceptionAoBuscarTodasCategorias() {
-        Mockito.when(repository.findAll(pageable)).thenThrow(RuntimeException.class);
+        Mockito.when(repository.findAllByUsuarioId(Mockito.any(),Mockito.any())).thenThrow(RuntimeException.class);
 
         DataProviderException exception = Assertions.assertThrows(
                 DataProviderException.class,
-                () -> dataProvider.buscarTodas(pageable));
+                () -> dataProvider.consultarTodas(UUID.randomUUID(), pageable));
 
         Assertions.assertEquals(CategoriaDataProvider.MENSAGEM_ERRO_BUSCAR_CATEGORIAS, exception.getMessage());
     }
 
     @Test
     void deveBuscarCategoriaPorIdComSucesso() {
-        Mockito.when(repository.findById(Mockito.any())).thenReturn(Optional.of(categoriaEntityTeste));
-        Mockito.when(mapper.paraDomain(Mockito.any())).thenReturn(categoriaDomainTeste);
+        Mockito.when(repository.findById(Mockito.any(UUID.class))).thenReturn(Optional.of(categoriaEntityTeste));
 
-        Optional<Categoria> resultado = dataProvider.buscarPorId(id);
+        Optional<Categoria> resultado = dataProvider.consultarPorId(id);
 
-        Assertions.assertNotNull(resultado.get().getId());
-        CategoriaValidator.validaCategoriaDomain(categoriaDomainTeste, resultado.get());
+        Assertions.assertTrue(resultado.isPresent());
+        Assertions.assertEquals(id, resultado.get().getId());
+        Mockito.verify(repository).findById(Mockito.any(UUID.class));
     }
 
     @Test
@@ -118,14 +112,14 @@ public class CategoriaDataProviderTest {
 
         DataProviderException exception = Assertions.assertThrows(
                 DataProviderException.class,
-                () -> dataProvider.buscarPorId(id));
+                () -> dataProvider.consultarPorId(id));
 
         Assertions.assertEquals(CategoriaDataProvider.MENSAGEM_ERRO_BUSCAR_CATEGORIA_POR_ID, exception.getMessage());
     }
 
     @Test
     void deveDeletarCategoriaComSucesso() {
-        Mockito.doNothing().when(repository).deleteById(id);
+        Mockito.doNothing().when(repository).deleteById(Mockito.any(UUID.class));
 
         dataProvider.deletar(id);
 

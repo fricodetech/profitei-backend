@@ -11,16 +11,19 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString
 @Builder
-public class Gasto {
+public class Operacao {
     private UUID id;
+    private String descricao;
+    private TipoOperacao tipoOperacao;
     private BigDecimal valor;
-    private LocalDate dataGasto;
+    private LocalDate dataOperacao;
     private Categoria categoria;
     private Usuario usuario;
 
-    public void alterarDados(Gasto novo) {
+    public void alterarDados(Operacao novo) {
+        this.descricao = novo.getDescricao();
         this.valor = novo.getValor();
-        this.dataGasto = novo.getDataGasto();
+        this.dataOperacao = novo.getDataOperacao();
         this.categoria = novo.getCategoria();
     }
 }

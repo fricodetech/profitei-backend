@@ -43,11 +43,11 @@ public class CategoriaDataProvider implements CategoriaGateway {
     }
 
     @Override
-    public Page<Categoria> buscarTodas(Pageable pageable) {
+    public Page<Categoria> consultarTodas(UUID idUsuario, Pageable pageable) {
         Page<CategoriaEntity> categoriaPage;
 
         try {
-            categoriaPage = repository.findAll(pageable);
+            categoriaPage = repository.findAllByUsuarioId(idUsuario, pageable);
         } catch (Exception e) {
             log.error(MENSAGEM_ERRO_BUSCAR_CATEGORIAS, e);
             throw new DataProviderException(MENSAGEM_ERRO_BUSCAR_CATEGORIAS, e);
@@ -57,7 +57,7 @@ public class CategoriaDataProvider implements CategoriaGateway {
     }
 
     @Override
-    public Optional<Categoria> buscarPorId(UUID id) {
+    public Optional<Categoria> consultarPorId(UUID id) {
         Optional<CategoriaEntity> categoriaBuscada;
 
         try {

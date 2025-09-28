@@ -2,7 +2,7 @@ package com.whatsapp.financeiro.infrastructure.dataprovider;
 
 import com.whatsapp.financeiro.application.gateway.UsuarioGateway;
 import com.whatsapp.financeiro.domain.Usuario;
-import com.whatsapp.financeiro.infraestructure.exceptions.DataProviderException;
+import com.whatsapp.financeiro.infrastructure.exceptions.DataProviderException;
 import com.whatsapp.financeiro.infrastructure.mapper.UsuarioMapperInfra;
 import com.whatsapp.financeiro.infrastructure.repository.UsuarioRepository;
 import com.whatsapp.financeiro.infrastructure.repository.entities.UsuarioEntity;
@@ -20,10 +20,10 @@ public class UsuarioDataProvider implements UsuarioGateway {
 
     private final UsuarioRepository repository;
 
-    private final String MENSAGEM_ERRO_SALVAR_USUARIO = "Erro ao salvar usuário.";
-    private final String MENSAGEM_ERRO_CONSULTAR_POR_ID = "Erro ao consultar usuário por id.";
-    private final String MENSAGEM_ERRO_DELETAR_POR_ID = "Erro ao deletar usuário pelo seu id.";
-    private final String MENSAGEM_ERRO_CONSULTAR_POR_TELEFONE = "Erro ao consultar usuário pelo seu email.";
+    public static final String MENSAGEM_ERRO_SALVAR_USUARIO = "Erro ao salvar usuário.";
+    public static final String MENSAGEM_ERRO_CONSULTAR_POR_ID = "Erro ao consultar usuário por id.";
+    public static final String MENSAGEM_ERRO_DELETAR_POR_ID = "Erro ao deletar usuário pelo seu id.";
+    public static final String MENSAGEM_ERRO_CONSULTAR_POR_TELEFONE = "Erro ao consultar usuário pelo seu email.";
 
     @Override
     public Usuario salvar(Usuario novoUsuario) {

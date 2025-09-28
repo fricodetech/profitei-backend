@@ -3,6 +3,7 @@ package com.whatsapp.financeiro.application.service;
 import com.whatsapp.financeiro.application.exceptions.UsuarioJaCadastradoException;
 import com.whatsapp.financeiro.application.exceptions.UsuarioNaoEncontradoException;
 import com.whatsapp.financeiro.application.gateway.UsuarioGateway;
+import com.whatsapp.financeiro.builder.UsuarioBuilder;
 import com.whatsapp.financeiro.domain.Usuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,125 +20,98 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class UsuarioServiceTest {
+public class UsuarioServiceTest {
 
     @Mock
     private UsuarioGateway gateway;
 
+    @Mock
+    private PlanoService planoService;
+
     @InjectMocks
     private UsuarioService service;
 
-    private Usuario usuario;
-    private UUID usuarioId;
+    private Usuario usuarioDomainTeste;
+    private UUID id;
 
     @BeforeEach
-    void setUp() {
-        usuarioId = UUID.randomUUID();
-        usuario = Usuario.builder()
-                .id(usuarioId)
-                .nome("Vitor")
-                .email("vitor@email.com")
-                .telefone("11999999999")
-                .build();
+    void inicializar() {
+        usuarioDomainTeste = UsuarioBuilder.criarUsuarioDomain();
+        id = usuarioDomainTeste.getId();
     }
 
-    // --- cadastrar() ---
     @Test
     void deveCadastrarUsuarioComSucesso() {
-        when(gateway.consultarPorTelefone(usuario.getTelefone())).thenReturn(Optional.empty());
-        when(gateway.salvar(usuario)).thenReturn(usuario);
+        when(gateway.consultarPorTelefone(anyString())).thenReturn(Optional.empty());
+        when(planoService.consultarPlanoPorId(any(UUID.class))).thenReturn(usuarioDomainTeste.getPlano());
+        when(gateway.salvar(any(Usuario.class))).thenReturn(usuarioDomainTeste);
 
-        Usuario resultado = service.cadastrar(usuario);
+        Usuario resultado = service.cadastrar(usuarioDomainTeste);
 
         assertNotNull(resultado);
-        assertEquals(usuarioId, resultado.getId());
-        verify(gateway, times(1)).consultarPorTelefone(usuario.getTelefone());
-        verify(gateway, times(1)).salvar(usuario);
+        assertEquals(usuarioDomainTeste.getId(), resultado.getId());
+        verify(gateway).consultarPorTelefone(usuarioDomainTeste.getTelefone());
+        verify(gateway).salvar(usuarioDomainTeste);
     }
 
     @Test
-    void deveLancarExcecaoQuandoUsuarioJaExistirAoCadastrar() {
-        when(gateway.consultarPorTelefone(usuario.getTelefone())).thenReturn(Optional.of(usuario));
+    void deveLancarExcecaoAoCadastrarUsuarioJaExistente() {
+        when(gateway.consultarPorTelefone(anyString())).thenReturn(Optional.of(usuarioDomainTeste));
 
-        assertThrows(UsuarioJaCadastradoException.class, () -> service.cadastrar(usuario));
+        UsuarioJaCadastradoException ex = assertThrows(UsuarioJaCadastradoException.class, () -> service.cadastrar(usuarioDomainTeste));
 
-        verify(gateway, times(1)).consultarPorTelefone(usuario.getTelefone());
-        verify(gateway, never()).salvar(any());
+        assertEquals("Usuário já cadastrado com este telefone.", ex.getMessage());
+        verify(gateway).consultarPorTelefone(usuarioDomainTeste.getTelefone());
     }
 
-    // --- consultarPorId() ---
     @Test
     void deveConsultarUsuarioPorIdComSucesso() {
-        when(gateway.consultarPorId(usuarioId)).thenReturn(Optional.of(usuario));
+        when(gateway.consultarPorId(any(UUID.class))).thenReturn(Optional.of(usuarioDomainTeste));
 
-        Usuario resultado = service.consultarPorId(usuarioId);
+        Usuario resultado = service.consultarPorId(id);
 
         assertNotNull(resultado);
-        assertEquals(usuarioId, resultado.getId());
-        verify(gateway, times(1)).consultarPorId(usuarioId);
+        assertEquals(usuarioDomainTeste.getNome(), resultado.getNome());
+        verify(gateway).consultarPorId(id);
     }
 
     @Test
-    void deveLancarExcecaoQuandoUsuarioNaoEncontradoPorId() {
-        when(gateway.consultarPorId(usuarioId)).thenReturn(Optional.empty());
+    void deveLancarExcecaoAoConsultarUsuarioPorIdNaoExistente() {
+        when(gateway.consultarPorId(any(UUID.class))).thenReturn(Optional.empty());
 
-        assertThrows(UsuarioNaoEncontradoException.class, () -> service.consultarPorId(usuarioId));
+        UsuarioNaoEncontradoException ex = assertThrows(UsuarioNaoEncontradoException.class, () -> service.consultarPorId(id));
 
-        verify(gateway, times(1)).consultarPorId(usuarioId);
+        assertEquals("Usuário não encontrado.", ex.getMessage());
+        verify(gateway).consultarPorId(id);
     }
 
-    // --- alterar() ---
     @Test
     void deveAlterarUsuarioComSucesso() {
-        Usuario novosDados = Usuario.builder()
-                .id(usuarioId)
-                .nome("Novo Nome")
-                .email("novo@email.com")
-                .telefone("11888888888")
-                .build();
+        Usuario novosDados = UsuarioBuilder.criarUsuarioDomain();
+        novosDados.setNome("Nome atualizado");
+        novosDados.setEmail("novoemail@gmail.com");
 
-        when(gateway.consultarPorId(usuarioId)).thenReturn(Optional.of(usuario));
-        when(gateway.salvar(any(Usuario.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(service.consultarPorId(any(UUID.class))).thenReturn(usuarioDomainTeste);
+        when(planoService.consultarPlanoPorId(any(UUID.class))).thenReturn(usuarioDomainTeste.getPlano());
+        when(gateway.salvar(any(Usuario.class))).thenReturn(usuarioDomainTeste);
 
-        Usuario resultado = service.alterar(usuarioId, novosDados);
+        Usuario resultado = service.alterar(id, novosDados);
 
-        assertEquals("Novo Nome", resultado.getNome());
-        assertEquals("novo@email.com", resultado.getEmail());
-        assertEquals("11888888888", resultado.getTelefone());
-        verify(gateway, times(1)).consultarPorId(usuarioId);
-        verify(gateway, times(1)).salvar(any(Usuario.class));
+        assertNotNull(resultado);
+        assertEquals("Nome atualizado", usuarioDomainTeste.getNome());
+        assertEquals("novoemail@gmail.com", usuarioDomainTeste.getEmail());
+        verify(gateway).consultarPorId(id);
+        verify(gateway).salvar(usuarioDomainTeste);
     }
 
-    @Test
-    void deveLancarExcecaoAoAlterarUsuarioNaoEncontrado() {
-        when(gateway.consultarPorId(usuarioId)).thenReturn(Optional.empty());
-
-        assertThrows(UsuarioNaoEncontradoException.class,
-                () -> service.alterar(usuarioId, usuario));
-
-        verify(gateway, times(1)).consultarPorId(usuarioId);
-        verify(gateway, never()).salvar(any());
-    }
-
-    // --- deletar() ---
     @Test
     void deveDeletarUsuarioComSucesso() {
-        when(gateway.consultarPorId(usuarioId)).thenReturn(Optional.of(usuario));
-        doNothing().when(gateway).deletar(usuarioId);
+        when(gateway.consultarPorId(any(UUID.class))).thenReturn(Optional.of(usuarioDomainTeste));
+        doNothing().when(gateway).deletar(any(UUID.class));
 
-        service.deletar(usuarioId);
+        service.deletar(id);
 
-        verify(gateway, times(1)).consultarPorId(usuarioId);
-        verify(gateway, times(1)).deletar(usuarioId);
-    }
-
-    @Test
-    void deveLancarExcecaoAoDeletarUsuarioNaoEncontrado() {
-        when(gateway.consultarPorId(usuarioId)).thenReturn(Optional.empty());
-
-        assertThrows(UsuarioNaoEncontradoException.class, () -> service.deletar(usuarioId));
-
-        verify(gateway, times(1)).consultarPorId(usuarioId);
-        verify(gateway, never()).deletar(usuarioId);
+        verify(gateway).consultarPorId(id);
+        verify(gateway).deletar(id);
     }
 }

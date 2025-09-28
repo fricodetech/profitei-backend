@@ -3,6 +3,7 @@ package com.whatsapp.financeiro.application.service;
 import com.whatsapp.financeiro.application.exceptions.UsuarioJaCadastradoException;
 import com.whatsapp.financeiro.application.exceptions.UsuarioNaoEncontradoException;
 import com.whatsapp.financeiro.application.gateway.UsuarioGateway;
+import com.whatsapp.financeiro.domain.Plano;
 import com.whatsapp.financeiro.domain.Usuario;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class UsuarioService {
 
     private final UsuarioGateway gateway;
+    private final PlanoService planoService;
 
     public Usuario cadastrar(Usuario novoUsuario) {
         log.info("Cadastrando novo usuário. Usuario: {}", novoUsuario);
@@ -26,6 +28,9 @@ public class UsuarioService {
         if(usuarioExistente.isPresent()) {
             throw new UsuarioJaCadastradoException();
         }
+
+        Plano plano = planoService.consultarPlanoPorId(novoUsuario.getPlano().getId());
+        novoUsuario.setPlano(plano);
 
         Usuario usuarioSalvo = gateway.salvar(novoUsuario);
 
@@ -46,6 +51,9 @@ public class UsuarioService {
 
     public Usuario alterar(UUID idUsuario, Usuario novosDados) {
         Usuario usuario = this.consultarPorId(idUsuario);
+
+        Plano plano = planoService.consultarPlanoPorId(novosDados.getId());
+        novosDados.setPlano(plano);
 
         usuario.setDados(novosDados);
 

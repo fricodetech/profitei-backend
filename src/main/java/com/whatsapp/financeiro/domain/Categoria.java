@@ -13,9 +13,9 @@ public class Categoria {
     private UUID id;
     private String titulo;
     private String descricao;
-    private Cliente cliente;
+    private Usuario usuario;
 
-    public void alterarAtributos(Categoria novo) {
+    public void alterarDados(Categoria novo) {
         this.setDescricao(novo.getDescricao());
         this.setTitulo(novo.getTitulo());
     }
