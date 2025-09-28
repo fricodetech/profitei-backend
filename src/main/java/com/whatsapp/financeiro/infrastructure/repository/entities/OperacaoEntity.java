@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity(name = "Operacao")
-@Table(name = "Operacoes")
+@Table(name = "operacoes")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class OperacaoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id_gasto")
+    @Column(name = "id_operacao")
     private UUID id;
 
     private String descricao;

@@ -35,7 +35,7 @@ public class OperacaoService {
 
         Operacao operacaoSalva = gateway.salvar(operacaoNova);
 
-        log.info("Gasto salvo com sucesso. Gasto: {}", operacaoSalva);
+        log.info("Operação salvo com sucesso. Operação: {}", operacaoSalva);
         return operacaoSalva;
     }
 
