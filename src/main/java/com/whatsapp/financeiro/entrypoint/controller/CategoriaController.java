@@ -20,7 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/categorias")
 @RequiredArgsConstructor
-public class CategoriaController {
+public class    CategoriaController {
 
     private final CategoriaService service;
 
